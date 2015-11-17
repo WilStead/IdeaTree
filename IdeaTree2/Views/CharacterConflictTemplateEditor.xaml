@@ -1,0 +1,103 @@
+﻿<Window x:Class="IdeaTree2.CharacterConflictTemplateEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IdeaTree2"
+        mc:Ignorable="d"
+        
+        Icon="pack://application:,,,/Icons/Tree32.png"
+        Title="Character / Conflict Editor"
+        Height="400" Width="600"
+        Background="#FFB4D7FA"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.DeleteProtagonist}" Executed="DeleteProtagonist_Executed"/>
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.AddProtagonist}" Executed="AddProtagonist_Executed"/>
+
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.DeleteSupportingCharacter}" Executed="DeleteSupportingCharacter_Executed"/>
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.AddSupportingCharacter}" Executed="AddSupportingCharacter_Executed"/>
+
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.DeleteConflict}" Executed="DeleteConflict_Executed"/>
+        <CommandBinding Command="{x:Static local:CharacterConflictTemplateEditor.AddConflict}" Executed="AddConflict_Executed"/>
+    </Window.CommandBindings>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Protagonists:"/>
+            <ListView Grid.Row="1" ItemsSource="{Binding Protagonists}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type s:String}">
+                        <DockPanel>
+                            <Button Command="{x:Static local:CharacterConflictTemplateEditor.DeleteProtagonist}" CommandParameter="{Binding}" Style="{StaticResource DeleteButton}" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+            <Button Command="{x:Static local:CharacterConflictTemplateEditor.AddProtagonist}" Style="{DynamicResource AddButton}" Grid.Row="2" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+            <Label Content="Supporting Characters:" Grid.Column="2"/>
+            <ListView ItemsSource="{Binding SupportingCharacters}" Grid.Row="1" Grid.Column="2">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type s:String}">
+                        <DockPanel>
+                            <Button Command="{x:Static local:CharacterConflictTemplateEditor.DeleteSupportingCharacter}" CommandParameter="{Binding}" Style="{StaticResource DeleteButton}" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+            <Button Command="{x:Static local:CharacterConflictTemplateEditor.AddSupportingCharacter}" Style="{DynamicResource AddButton}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+            <Label Content="Conflicts:" Grid.Column="4"/>
+            <ListView ItemsSource="{Binding Conflicts}" Grid.Row="1" Grid.Column="4">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type s:String}">
+                        <DockPanel>
+                            <Button Command="{x:Static local:CharacterConflictTemplateEditor.DeleteConflict}" CommandParameter="{Binding}" Style="{StaticResource DeleteButton}" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+            <Button Command="{x:Static local:CharacterConflictTemplateEditor.AddConflict}" Style="{DynamicResource AddButton}" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+        </Grid>
+        <Button Click="button_OK_Click" Content="_OK" MinWidth="60" Margin="5" Grid.Column="1" Grid.Row="1"/>
+    </Grid>
+</Window>

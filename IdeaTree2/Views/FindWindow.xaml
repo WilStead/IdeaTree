@@ -1,0 +1,38 @@
+﻿<Window x:Class="IdeaTree2.FindWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IdeaTree2"
+        mc:Ignorable="d"
+        Title="Find" MinWidth="300" Width="350" SizeToContent="Height" MinHeight="200"
+        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" Background="#FFB4D7FA" Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.ColumnSpan="2">
+            <Label Content="Find:" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBox_FindText" VerticalAlignment="Center"/>
+        </DockPanel>
+        <Button Content="Find Next" Grid.Column="2" MinWidth="80" Margin="10,5" IsDefault="True" Click="FindNext_Click"/>
+        <DockPanel x:Name="dockPanel_ReplaceText" Grid.Row="1" Grid.ColumnSpan="2">
+            <Label Content="Replace with:" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBox_ReplaceText" VerticalAlignment="Center"/>
+        </DockPanel>
+        <Button Content="Find Prev" Grid.Row="1" Grid.Column="2" MinWidth="80" Margin="10,5" Click="FindPrev_Click"/>
+        <CheckBox x:Name="checkBox_MatchCase" Content="Match case" Grid.Row="3" Grid.Column="1"/>
+        <Button x:Name="button_Replace" Content="Replace" Grid.Row="2" Grid.Column="2" MinWidth="80" Margin="10,5" Click="Replace_Click"/>
+        <Button x:Name="button_ReplaceAll" Content="Replace All" Grid.Row="3" Grid.Column="2" MinWidth="80" Margin="10,5" Click="ReplaceAll_Click"/>
+        <Button Content="Close" Grid.Row="4" Grid.Column="2" MinWidth="80" Margin="10,5" IsCancel="True" Click="Close_Click"/>
+    </Grid>
+</Window>

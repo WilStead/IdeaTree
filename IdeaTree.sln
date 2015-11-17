@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdeaTree2", "IdeaTree2\IdeaTree2.csproj", "{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}"
+EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup", "Setup\Setup.isproj", "{FB787F02-81B7-4621-9882-DD008A651F6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
+		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.Debug|Any CPU.ActiveCfg = DVD-5
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.DVD-5|Any CPU.Build.0 = DVD-5
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.Release|Any CPU.ActiveCfg = SingleImage
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{FB787F02-81B7-4621-9882-DD008A651F6E}.SingleImage|Any CPU.Build.0 = SingleImage
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

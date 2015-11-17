@@ -1,0 +1,329 @@
+﻿<UserControl x:Class="IdeaTree2.CharacterNoteControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IdeaTree2"
+             mc:Ignorable="d" 
+             d:DesignHeight="475" d:DesignWidth="590" Background="#FFB4D7FA" DataContextChanged="UserControl_DataContextChanged">
+
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
+
+        <Style x:Key="NoteOptionTreeViewItem" TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+        </Style>
+
+        <local:NoteOptionColorConverter x:Key="NoteOptionColorConverter"/>
+        <local:BirthNameBoolConverter x:Key="BirthNameBoolConverter"/>
+
+        <ContextMenu x:Key="NoteOptionContextMenu">
+            <MenuItem Header="Randomize" Command="{x:Static local:CharacterNoteControl.RandomizeNoteOption}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+            <MenuItem Header="Add Custom Child Option" Command="{x:Static local:CharacterNoteControl.AddCustomChild}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+            <MenuItem Header="Save Custom Option to Template" Command="{x:Static local:CharacterNoteControl.SaveCustomToTemplate}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+            <Separator/>
+            <MenuItem Header="Collapse All" Command="{x:Static local:CharacterNoteControl.CollapseAll}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+            <MenuItem Header="Expand All" Command="{x:Static local:CharacterNoteControl.ExpandAll}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+        </ContextMenu>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.RandomizeNoteOption}" Executed="RandomizeNoteOptionCommand" CanExecute="CanCommandNoteOption"/>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.AddCustomChild}" Executed="AddCustomChildCommand" CanExecute="CanCommandNoteOption"/>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.SaveCustomToTemplate}" Executed="SaveCustomToTemplateCommand" CanExecute="CanSaveCustomToTemplate"/>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.CollapseAll}" Executed="CollapseAllCommand"/>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.ExpandAll}" Executed="ExpandAllCommand"/>
+    </UserControl.CommandBindings>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Button ToolTip="New Character (Randomize All)" Click="button_NewCharacter_Click" Style="{DynamicResource NewButton}" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                <StackPanel Orientation="Horizontal" ToolTip="Restrict random choices to Relationship-appropriate options (for surname, gender, race, age).">
+                    <Image Source="pack://application:,,,/Icons/Actions-document-encrypt-icon_16.png" Height="14" Width="14"/>
+                    <CheckBox x:Name="checkBox_RelationshipRestriction" IsChecked="True"/>
+                </StackPanel>
+            </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Margin="0,0,2,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Title:" Padding="5,5,5,0"/>
+                    <Button Click="button_EditTitlesAndSuffixes_Click" Grid.Column="1" ToolTip="Edit Titles" Style="{DynamicResource EditButton}" Width="12" Height="12" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,2"/>
+                    <ComboBox Text="{Binding Title}" ItemsSource="{Binding RootSaveFile.Template.CharacterTemplate.Titles}" Grid.Row="1" Grid.ColumnSpan="2" IsEditable="True"/>
+                    <Label Grid.Column="2" Content="First Name:" Padding="5,5,5,0"/>
+                    <Label Grid.Column="3" Content="Cul.?" ToolTip="Chance to select a cultural name based on national heritage" Padding="5,5,5,0"/>
+                    <TextBox Text="{Binding FirstName}" Grid.Row="1" Grid.Column="2"/>
+                    <xctk:IntegerUpDown x:Name="integerUpDown_CulturalFirstName" Grid.Row="1" Grid.Column="3" ToolTip="Chance to select a cultural name based on national heritage" DefaultValue="50" DisplayDefaultValueOnEmptyText="True" Value="50"/>
+                    <Button Click="button_NewFirstName_Click" ToolTip="New First Name" Grid.Row="1" Grid.Column="4" Style="{DynamicResource NewRandomButton}"/>
+                </Grid>
+                <Grid Grid.Column="1" Margin="2,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <local:CollapsibleColumnDefinition Width="*">
+                                <local:CollapsibleColumnDefinition.Style>
+                                    <Style TargetType="local:CollapsibleColumnDefinition">
+                                        <Setter Property="Visible" Value="False"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding ElementName=checkBox_ShowBirthName, Path=IsChecked}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visible" Value="True"/>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding BirthName, Converter={StaticResource BirthNameBoolConverter}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visible" Value="True"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:CollapsibleColumnDefinition.Style>
+                            </local:CollapsibleColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Surname:" Padding="5,5,5,0"/>
+                            <Button Click="button_CopySurname_Click" ToolTip="Copy Surname from Parent Note" Grid.Column="1" Style="{DynamicResource DropShadowOnFocusEffect}"
+                                Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                <Image Height="16" Width="16" Source="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            </Button>
+                            <TextBox x:Name="textBox_Surname" Text="{Binding Surname}" Grid.Row="1" Grid.ColumnSpan="2" Height="22"/>
+                            <CheckBox x:Name="checkBox_ShowBirthName" ToolTip="Show Birth Name" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Birth Name:" Padding="5,5,5,0"/>
+                            <Button Click="button_CopyFamilyName_Click" ToolTip="Copy Family Name from Parent Note" Grid.Column="1" Style="{DynamicResource DropShadowOnFocusEffect}"
+                                Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                <Image Height="16" Width="16" Source="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            </Button>
+                            <TextBox x:Name="textBox_BirthName" Text="{Binding BirthName}" Grid.Row="1" Grid.ColumnSpan="2" Height="22"/>
+                        </Grid>
+                    </Grid>
+                    <Label Content="Cul.?" Grid.Column="1" ToolTip="Chance to select a cultural name based on national heritage" Padding="5,5,5,0"/>
+                    <xctk:IntegerUpDown x:Name="integerUpDown_CulturalSurname" Grid.Row="1" Grid.Column="1" ToolTip="Chance to select a cultural name based on national heritage"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center" Value="100" DefaultValue="100" DisplayDefaultValueOnEmptyText="True"/>
+                    <Button Click="button_NewSurname_Click" ToolTip="New Surname" Grid.Row="1" Grid.Column="2" Style="{DynamicResource NewRandomButton}"/>
+                    <Label Grid.Column="3" Content="Suffix:" Padding="5,5,5,0"/>
+                    <Button Click="button_EditTitlesAndSuffixes_Click" Grid.Column="4" ToolTip="Edit Suffixes" Style="{DynamicResource EditButton}" Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                    <ComboBox Text="{Binding Suffix}" ItemsSource="{Binding RootSaveFile.Template.CharacterTemplate.Suffixes}" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" IsEditable="True"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Margin="0,0,2,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Gender:" Padding="5,5,5,0"/>
+                    <Button Click="button_EditGenders_Click" ToolTip="Edit Genders" Grid.Column="1" Style="{DynamicResource EditButton}" Width="12" Height="12"
+                            VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                    <Button Click="button_CustomGender_Click" ToolTip="Add Custom Gender" Grid.Column="2" Style="{DynamicResource AddButton}" Width="12" Height="12" HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                    <xctk:DropDownButton x:Name="dropDownButton_Gender" Content="{Binding Genders.LeafSummary, Mode=OneWay}" Grid.Row="1" Grid.ColumnSpan="3">
+                        <xctk:DropDownButton.Resources>
+                            <DiscreteObjectKeyFrame x:Key="genderBinder1" KeyTime="0" Value="{Binding RelativeSource={RelativeSource AncestorType=xctk:DropDownButton}, Path=ActualWidth}"/>
+                        </xctk:DropDownButton.Resources>
+                        <xctk:DropDownButton.DropDownContent>
+                            <Grid MinWidth="{Binding Source={StaticResource genderBinder1}, Path=Value}" MaxHeight="350"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <TreeView ItemsSource="{Binding Genders.ChildOptions}" ItemContainerStyle="{StaticResource NoteOptionTreeViewItem}" Background="#00000000">
+                                    <TreeView.Resources>
+                                        <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                        <StackPanel Orientation="Horizontal" Height="18">
+                                            <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    </TreeView.Resources>
+                                </TreeView>
+                            </Grid>
+                        </xctk:DropDownButton.DropDownContent>
+                    </xctk:DropDownButton>
+                    <Button Click="button_NewGender_Click" ToolTip="New Gender" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" Style="{DynamicResource NewRandomButton}"/>
+                </Grid>
+                <Grid Grid.Column="1" Margin="2,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Race / Nationality:" Padding="5,5,5,0"/>
+                    <Button Click="button_EditRaces_Click" ToolTip="Edit Races" Grid.Column="1" Style="{DynamicResource EditButton}" Width="12" Height="12"
+                            VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+                    <Button Click="button_CustomRace_Click" ToolTip="Add Custom Race" Grid.Column="2" Style="{DynamicResource AddButton}" Width="12" Height="12"
+                            VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                    <Button Click="button_DefaultRace_Click" ToolTip="Select Default Race" Grid.Column="3" Style="{DynamicResource DropShadowOnFocusEffect}"
+                            Background="{x:Null}" BorderBrush="{x:Null}" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,2">
+                        <Image Source="pack://application:,,,/Icons/Actions-view-filter-icon_16.png" Width="12" Height="12"/>
+                    </Button>
+                    <xctk:DropDownButton x:Name="dropDownButton_Race" Content="{Binding Races.LeafSummary, Mode=OneWay}" Grid.Row="1" Grid.ColumnSpan="4">
+                        <xctk:DropDownButton.Resources>
+                            <DiscreteObjectKeyFrame x:Key="raceBinder1" KeyTime="0" Value="{Binding RelativeSource={RelativeSource AncestorType=xctk:DropDownButton}, Path=ActualWidth}"/>
+                        </xctk:DropDownButton.Resources>
+                        <xctk:DropDownButton.DropDownContent>
+                            <Grid MinWidth="{Binding Source={StaticResource raceBinder1}, Path=Value}" MaxHeight="350"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <TreeView ItemsSource="{Binding Races.ChildOptions}" ItemContainerStyle="{StaticResource NoteOptionTreeViewItem}">
+                                    <TreeView.Resources>
+                                        <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                        <StackPanel Orientation="Horizontal" Height="18">
+                                            <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    </TreeView.Resources>
+                                </TreeView>
+                            </Grid>
+                        </xctk:DropDownButton.DropDownContent>
+                    </xctk:DropDownButton>
+                    <Button Click="button_NewRaces_Click" ToolTip="New Race" Grid.Row="1" Grid.Column="4" Style="{DynamicResource NewRandomButton}"/>
+                </Grid>
+                <Grid Grid.Column="2" Margin="2,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Age:" Padding="5,5,5,0"/>
+                    <Button Click="button_EditAges_Click" Grid.Column="1" ToolTip="Edit Age Probabilities" Style="{DynamicResource EditButton}" Width="12" Height="12"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,2"/>
+                    <Label Content="Months:" Padding="5,5,5,0" Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <xctk:IntegerUpDown x:Name="integerUpDown_AgeYears" Value="{Binding AgeYears}" Minimum="0" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <xctk:IntegerUpDown x:Name="integerUpDown_AgeMonths" Value="{Binding AgeMonths}" Minimum="0" Maximum="11" Grid.Row="1" Grid.Column="2"/>
+                    <Button Click="button_NewAge_Click" ToolTip="New Gender" Grid.Row="1" Grid.Column="3" Style="{DynamicResource NewRandomButton}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Traits:" Padding="5,5,5,0"/>
+            <Button Click="button_NewTraits_Click" ToolTip="Randomize Traits" Grid.Column="1" Style="{DynamicResource NewButton}" VerticalAlignment="Bottom" Margin="2,0"/>
+            <Button Click="button_EditTraits_Click" ToolTip="Edit Traits" Grid.Column="2" Style="{DynamicResource EditButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Button Click="button_AddCustomTrait_Click" ToolTip="Add Custom Value" Grid.Column="3" Style="{DynamicResource AddButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Button Click="button_ClearTraits_Click" ToolTip="Clear Traits" Grid.Column="4" Style="{DynamicResource DeleteButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Grid Grid.Row="1" Grid.ColumnSpan="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TreeView x:Name="treeView_Traits" ItemsSource="{Binding Traits.ChildOptions}" ItemContainerStyle="{StaticResource NoteOptionTreeViewItem}" Margin="0,0,2,0" Background="#00000000"
+                          ContextMenu="{StaticResource NoteOptionContextMenu}" PreviewMouseRightButtonDown="noteTreeViewItem_PreviewMouseRightButtonDown">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                            <StackPanel Orientation="Horizontal" Height="18">
+                                <CheckBox IsChecked="{Binding IsChecked}" Margin="0,0,2,0"/>
+                                <TextBlock Text="{Binding Name}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <MultiBinding Converter="{StaticResource NoteOptionColorConverter}">
+                                                        <Binding Path="."/>
+                                                        <Binding Path="RootIdea.RootSaveFile.Template.CharacterTemplate.Traits"/>
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                    </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+                <TextBox Text="{Binding Traits.Summary, Mode=OneWay}" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Margin="2,0,0,0"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

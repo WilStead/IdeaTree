@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="IdeaTree2.MediaNoteControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IdeaTree2"
+             mc:Ignorable="d"
+             
+             d:DesignHeight="475" d:DesignWidth="600" Background="#FFB4D7FA"
+             x:Name="mediaNoteControl" DataContextChanged="mediaNoteControl_DataContextChanged">
+    
+    <UserControl.Resources>
+        <Style x:Key="MediaLoadedLabelStyle" TargetType="Label">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=mediaNoteControl, Path=HasMedia}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="7" Grid.RowSpan="1" Background="#FFB4D7FA">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Source="pack://application:,,,/Icons/missing.png" Height="30" Width="28" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+            <Label Grid.Row="1" Content="Double-click to Set Media" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0"/>
+        </Grid>
+        <ContentControl Grid.ColumnSpan="7" MouseDoubleClick="Loader_MouseDoubleClick" MouseLeftButtonDown="Loader_MouseLeftButtonDown">
+            <Grid Background="#01000000">
+                <MediaElement x:Name="mediaElement_Main" Source="{Binding Path=FileName}" LoadedBehavior="Manual"
+                                  MediaEnded="mediaElement_Main_MediaEnded" MediaFailed="mediaElement_Main_MediaFailed">
+                    <MediaElement.Style>
+                        <Style TargetType="MediaElement">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=mediaNoteControl, Path=HasMedia}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MediaElement.Style>
+                </MediaElement>
+            </Grid>
+        </ContentControl>
+        <Slider x:Name="slider_Progress" Thumb.DragStarted="slider_Progress_DragStarted" Thumb.DragCompleted="slider_Progress_DragCompleted" ValueChanged="slider_Progress_ValueChanged"
+                Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" LargeChange="5000" IsMoveToPointEnabled="True" SmallChange="1000">
+            <Slider.Style>
+                <Style TargetType="Slider">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=mediaNoteControl, Path=HasMedia}" Value="True">
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Slider.Style>
+        </Slider>
+        <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label x:Name="label_Position" Style="{StaticResource MediaLoadedLabelStyle}"/>
+            <Label Content="/" Style="{StaticResource MediaLoadedLabelStyle}"/>
+            <Label x:Name="label_Duration" Style="{StaticResource MediaLoadedLabelStyle}"/>
+        </StackPanel>
+        <Button Grid.Row="2" Grid.Column="3" Margin="4" Click="PlayPauseButton_Click">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource DropShadowOnFocusEffect}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Grid x:Name="Grid">
+                                    <Image Source="pack://application:,,,/Icons/Actions-media-playback-start-icon_16.png" Style="{StaticResource ImageEnabled}" Height="16" Width="16"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=mediaNoteControl, Path=IsPlaying}" Value="True">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Grid x:Name="Grid">
+                                            <Image Source="pack://application:,,,/Icons/Actions-media-playback-pause-icon_16.png" Style="{StaticResource ImageEnabled}" Height="16" Width="16"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=mediaNoteControl, Path=HasMedia}" Value="True">
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Image Source="pack://application:,,,/Icons/Actions-player-volume-icon_16.png" Width="16" Height="16" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Right" Margin="0,0,2,0"/>
+        <Slider ToolTip="Volume" Value="{Binding ElementName=mediaElement_Main, Path=Volume}" Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" Maximum="1"/>
+    </Grid>
+</UserControl>

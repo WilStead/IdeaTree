@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4C2EC9AC-3718-4C24-AE0B-B58C21C09C91}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IdeaTree2</RootNamespace>
+    <AssemblyName>IdeaTree2</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icons\Tree.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>IdeaTree2.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.1.0.0-ALPHA010\lib\net40\GongSolutions.Wpf.DragDrop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.1.271, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharpZipLib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MonitoredUndo, Version=1.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MUF.1.2.1\lib\net40\MonitoredUndo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Views\RelationshipDialog.xaml.cs">
+      <DependentUpon>RelationshipDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TitlesAndSuffixesTemplateEditor.xaml.cs">
+      <DependentUpon>TitlesAndSuffixesTemplateEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CharacterConflictTemplateEditor.xaml.cs">
+      <DependentUpon>CharacterConflictTemplateEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CharacterNote.cs" />
+    <Compile Include="TimelineNote.cs" />
+    <Compile Include="Views\CollapsibleColumnDefinition.cs" />
+    <Compile Include="Views\FindWindow.xaml.cs">
+      <DependentUpon>FindWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IdeaTreeSaveFile.cs" />
+    <Compile Include="IdeaTreeTemplate.cs" />
+    <Compile Include="Views\PromptDialog.xaml.cs">
+      <DependentUpon>PromptDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StoryNote.cs" />
+    <Compile Include="Views\MediaNoteControl.xaml.cs">
+      <DependentUpon>MediaNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\CharacterNoteControl.xaml.cs">
+      <DependentUpon>CharacterNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CharacterNoteOptions.cs" />
+    <Compile Include="IdeaNote.cs" />
+    <Compile Include="Views\FileNoteControl.xaml.cs">
+      <DependentUpon>FileNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImageNoteControl.xaml.cs">
+      <DependentUpon>ImageNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NoteOption.cs" />
+    <Compile Include="Views\StoryNoteControl.xaml.cs">
+      <DependentUpon>StoryNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimelineNoteControl.xaml.cs">
+      <DependentUpon>TimelineNoteControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\RelationshipDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TitlesAndSuffixesTemplateEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CharacterConflictTemplateEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PromptDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MediaNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CharacterNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FileNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ImageNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\Simple Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\StoryNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TimelineNoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Monitored Undo Documentation.docx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Tree32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\add_16.png" />
+    <Resource Include="Icons\arrow-back_16.png" />
+    <Resource Include="Icons\arrow-down_16.png" />
+    <Resource Include="Icons\arrow-forward_16.png" />
+    <Resource Include="Icons\arrow-up_16.png" />
+    <Resource Include="Icons\centerAlignButton.Image.png" />
+    <Resource Include="Icons\delete_16.png" />
+    <Resource Include="Icons\EditInformationHS.png" />
+    <Resource Include="Icons\FindHS.png" />
+    <Resource Include="Icons\FindNextHS.png" />
+    <Resource Include="Icons\FindPreviousHS.png" />
+    <Resource Include="Icons\FindTree.png" />
+    <Resource Include="Icons\FindTreeNext.png" />
+    <Resource Include="Icons\FindTreePrev.png" />
+    <Resource Include="Icons\IndentHS.png" />
+    <Resource Include="Icons\leftAlignButton.Image.png" />
+    <Resource Include="Icons\List_BulletsHS.png" />
+    <Resource Include="Icons\OutdentHS.png" />
+    <Resource Include="Icons\rightAlignButton.Image.png" />
+    <Resource Include="Icons\Tree.png" />
+    <Resource Include="Icons\Tree48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\double_arrow-back_16.png" />
+    <Resource Include="Icons\double_arrow-down_16.png" />
+    <Resource Include="Icons\double_arrow-forward_16.png" />
+    <Resource Include="Icons\double_arrow-up_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\List_NumberedHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\missing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\justifyAlignButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Tree.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-bookmarks-organize-icon_16.png" />
+    <Resource Include="Icons\Actions-document-encrypt-icon_16.png" />
+    <Resource Include="Icons\Actions-document-new-icon_16.png" />
+    <Resource Include="Icons\Actions-document-open-icon_16.png" />
+    <Resource Include="Icons\Actions-document-revert-icon_16.png" />
+    <Resource Include="Icons\Actions-document-save-as-icon_16.png" />
+    <Resource Include="Icons\Actions-document-save-icon_16.png" />
+    <Resource Include="Icons\Actions-edit-copy-icon_16.png" />
+    <Resource Include="Icons\Actions-edit-cut-icon_16.png" />
+    <Resource Include="Icons\Actions-edit-paste-icon_16.png" />
+    <Resource Include="Icons\Actions-edit-paste-icon_32.png" />
+    <Resource Include="Icons\Actions-edit-redo-icon_16.png" />
+    <Resource Include="Icons\Actions-edit-undo-icon_16.png" />
+    <Resource Include="Icons\Actions-format-text-color-icon_16.png" />
+    <Resource Include="Icons\Actions-mail-mark-task-icon_16.png" />
+    <Resource Include="Icons\Actions-media-playback-pause-icon_16.png" />
+    <Resource Include="Icons\Actions-media-playback-start-icon_16.png" />
+    <Resource Include="Icons\Actions-player-volume-icon_16.png" />
+    <Resource Include="Icons\Actions-tool-animator-icon_16.png" />
+    <Resource Include="Icons\Actions-tools-wizard-icon_16.png" />
+    <Resource Include="Icons\Actions-view-calendar-day-icon_16.png" />
+    <Resource Include="Icons\Actions-view-filter-icon_16.png" />
+    <Resource Include="Icons\Actions-view-preview-icon_16.png" />
+    <Resource Include="Icons\Actions-view-refresh-icon_16.png" />
+    <Resource Include="Icons\Apps-accessories-text-editor-icon_16.png" />
+    <Resource Include="Icons\Apps-system-users-icon_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-application-exit-icon_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-document-revert-icon_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-document-encrypt-icon_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-mail-mark-task-icon_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-edit-select-all-icon_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Categories-system-help-icon_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Actions-edit-rename-icon_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Subscript.png" />
+    <Resource Include="Icons\Superscript.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\text-underline-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\text-bold-icon.png" />
+    <Resource Include="Icons\text-italic-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Categories-system-help-icon_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\American\North American\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\American\North American\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\American\North American\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Eastern Asian\Japanese\female_names.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Irish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\female_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\male_names.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Eastern Asian\Chinese\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Chinese\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Chinese\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Black\American\Caribbean Islander\Haitian\female_names.txt" />
+    <Resource Include="NameFiles\Black\American\Caribbean Islander\Haitian\male_names.txt" />
+    <Resource Include="NameFiles\Black\American\Caribbean Islander\Haitian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Eastern Asian\Japanese\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Japanese\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Eastern Asian\Korean\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Korean\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Korean\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Eastern Asian\Mongolian\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Mongolian\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Eastern Asian\Mongolian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Central Asian\Kazakh\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Central Asian\Kazakh\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Central Asian\Kazakh\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southern Asian\Bangladeshi\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Bangladeshi\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Bangladeshi\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southern Asian\Indian\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Indian\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Indian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southern Asian\Nepalese\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Nepalese\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southern Asian\Nepalese\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southeast Asian\Cambodian\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Cambodian\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Cambodian\surnames.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Filipino\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Filipino\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Filipino\surnames.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Indonesian\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Indonesian\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Indonesian\surnames.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Malaysian\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Malaysian\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Malaysian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southeast Asian\Thai\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Thai\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Thai\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Asian\Southeast Asian\Vietnamese\female_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Vietnamese\male_names.txt" />
+    <Resource Include="NameFiles\Asian\Southeast Asian\Vietnamese\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Black\African\Southern African\female_names.txt" />
+    <Resource Include="NameFiles\Black\African\Southern African\male_names.txt" />
+    <Resource Include="NameFiles\Black\African\Southern African\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Black\African\Eastern African\female_names.txt" />
+    <Resource Include="NameFiles\Black\African\Eastern African\male_names.txt" />
+    <Resource Include="NameFiles\Black\African\Eastern African\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Black\African\Western African\female_names.txt" />
+    <Resource Include="NameFiles\Black\African\Western African\male_names.txt" />
+    <Resource Include="NameFiles\Black\African\Western African\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Hispanic\female_names.txt" />
+    <Resource Include="NameFiles\Hispanic\male_names.txt" />
+    <Resource Include="NameFiles\Hispanic\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Black\American\North American\United States American\female_names.txt" />
+    <Resource Include="NameFiles\Black\American\North American\United States American\male_names.txt" />
+    <Resource Include="NameFiles\Black\American\North American\United States American\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\Australian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\Australian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\Australian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Czech\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Czech\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Czech\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Polish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Polish\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Polish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Romanian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Romanian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Romanian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Russian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Russian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Russian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Ukrainian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Ukrainian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Eastern European\Ukrainian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Danish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Danish\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Danish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\English\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\English\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\English\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Finnish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Finnish\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Finnish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Irish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Irish\male_names.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Norwegian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Norwegian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Norwegian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Scottish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Scottish\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Scottish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Swedish\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Swedish\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Northern European\Swedish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Greek\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Greek\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Greek\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Italian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Italian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Italian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Serbian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Serbian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Southern European\Serbian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\Austrian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Austrian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Austrian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\Swiss\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Swiss\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Swiss\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\Belgian\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Belgian\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Belgian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\German\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\German\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\German\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\Dutch\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Dutch\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\Dutch\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Caucasian\European\Western European\French\female_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\French\male_names.txt" />
+    <Resource Include="NameFiles\Caucasian\European\Western European\French\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Hispanic\European\Portuguese\female_names.txt" />
+    <Resource Include="NameFiles\Hispanic\European\Portuguese\male_names.txt" />
+    <Resource Include="NameFiles\Hispanic\European\Portuguese\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous Australian\female_names.txt" />
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous Australian\male_names.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Indigenous Peoples\Oceania Native\female_names.txt" />
+    <Resource Include="NameFiles\Indigenous Peoples\Oceania Native\male_names.txt" />
+    <Resource Include="NameFiles\Indigenous Peoples\Oceania Native\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Azerbaijani\female_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Azerbaijani\male_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Azerbaijani\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Iranian\female_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Iranian\male_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Iranian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Israeli\female_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Israeli\male_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Israeli\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Turkish\female_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Turkish\male_names.txt" />
+    <Resource Include="NameFiles\Middle Eastern\Western Asian\Turkish\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous American\Indigenous North American\female_names.txt" />
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous American\Indigenous North American\male_names.txt" />
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous American\Indigenous North American\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="NameFiles\Indigenous Peoples\Indigenous Australian\surnames.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

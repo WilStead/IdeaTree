@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="IdeaTree2.TimelineNoteControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IdeaTree2"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="600" Background="#FFB4D7FA">
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:TimelineNoteControl.DeleteEvent}" Executed="DeleteEvent_Executed"/>
+        <CommandBinding Command="{x:Static local:TimelineNoteControl.AddEvent}" Executed="AddEvent_Executed"/>
+    </UserControl.CommandBindings>
+
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="EventCVS" Source="{Binding Path=Events}" IsLiveSortingRequested="True">
+            <CollectionViewSource.LiveSortingProperties>
+                <s:String>Date</s:String>
+            </CollectionViewSource.LiveSortingProperties>
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Date"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <DataTemplate x:Key="DateEntry">
+            <DockPanel>
+                <xctk:DateTimePicker Value="{Binding Path=Date}" Format="Custom" FormatString="dddd, MMMM d" MinWidth="183" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True" TimePickerVisibility="Hidden" DockPanel.Dock="Left"/>
+                <CheckBox x:Name="checkBox_UseYear" IsChecked="{Binding Path=UseYear}" Margin="5,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Left"/>
+                <xctk:DateTimeUpDown Value="{Binding Path=Date}" Format="Custom" FormatString="yyy" MinWidth="51" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True"
+                                     IsEnabled="{Binding ElementName=checkBox_UseYear, Path=IsChecked}" DockPanel.Dock="Left"/>
+                <CheckBox x:Name="checkBox_UseTime" IsChecked="{Binding Path=UseTime}" Margin="5,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Left"/>
+                <xctk:DateTimeUpDown Value="{Binding Path=Date}" Format="ShortTime" MinWidth="74" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True"
+                                     IsEnabled="{Binding ElementName=checkBox_UseTime, Path=IsChecked}" DockPanel.Dock="Left"/>
+                <Button Command="{x:Static local:TimelineNoteControl.DeleteEvent}" CommandParameter="{Binding}" ToolTip="Delete" Margin="5,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Right">
+                    <Image Source="pack://application:,,,/Icons/delete_16.png" Height="16" Width="16"/>
+                </Button>
+                <Grid Height="26" Margin="5,0,0,0" DockPanel.Dock="Left">
+                    <TextBlock Text="{Binding Path=RtfFirstLine}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                </Grid>
+            </DockPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border BorderThickness="2" CornerRadius="1" Margin="1">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Border.BorderBrush>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Now:"/>
+                <xctk:DateTimePicker Value="{Binding Path=Now}" Format="Custom" FormatString="dddd, MMMM d" MinWidth="183" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True" TimePickerVisibility="Hidden"/>
+                <CheckBox x:Name="checkBox_UseYear" IsChecked="{Binding Path=NowYear}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <xctk:DateTimeUpDown Value="{Binding Path=Now}" Format="Custom" FormatString="yyy" MinWidth="51" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True"
+                                     IsEnabled="{Binding ElementName=checkBox_UseYear, Path=IsChecked}"/>
+                <CheckBox x:Name="checkBox_UseTime" IsChecked="{Binding Path=NowTime}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <xctk:DateTimeUpDown Value="{Binding Path=Now}" Format="ShortTime" MinWidth="74" DefaultValue="01/01/2015 12:00:00" DisplayDefaultValueOnEmptyText="True"
+                                     IsEnabled="{Binding ElementName=checkBox_UseTime, Path=IsChecked}"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" BorderThickness="2" CornerRadius="1" Margin="1">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Border.BorderBrush>
+            <DockPanel>
+                <Label Content="Events:" DockPanel.Dock="Top"/>
+                <Button Command="{x:Static local:TimelineNoteControl.AddEvent}" Style="{DynamicResource AddButton}" DockPanel.Dock="Bottom" HorizontalAlignment="Right" ToolTip="Add" Margin="2"/>
+                <ListBox x:Name="listBox_Events" ItemsSource="{Binding Source={StaticResource EventCVS}}" ItemTemplate="{StaticResource DateEntry}" Background="#00000000" DockPanel.Dock="Top"/>
+            </DockPanel>
+        </Border>
+        <Border Grid.Row="2" BorderThickness="2" CornerRadius="1" Margin="1">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Border.BorderBrush>
+            <DockPanel>
+                <Label Content="Event Notes:" DockPanel.Dock="Top"/>
+                <xctk:RichTextBox Text="{Binding ElementName=listBox_Events, Path=SelectedItem.Rtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SpellCheck.IsEnabled="True">
+                    <xctk:RichTextBoxFormatBarManager.FormatBar>
+                        <xctk:RichTextBoxFormatBar/>
+                    </xctk:RichTextBoxFormatBarManager.FormatBar>
+                    <xctk:RichTextBox.Style>
+                        <Style TargetType="xctk:RichTextBox">
+                            <Setter Property="IsEnabled" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=listBox_Events, Path=SelectedIndex}" Value="-1">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xctk:RichTextBox.Style>
+                </xctk:RichTextBox>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

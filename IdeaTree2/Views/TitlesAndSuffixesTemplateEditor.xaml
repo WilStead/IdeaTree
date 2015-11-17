@@ -1,0 +1,81 @@
+﻿<Window x:Class="IdeaTree2.TitlesAndSuffixesTemplateEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IdeaTree2"
+        mc:Ignorable="d"
+        
+        Icon="pack://application:,,,/Icons/Tree32.png"
+        Title="Titles and Suffixes Editor"
+        Height="400" Width="400"
+        Background="#FFB4D7FA"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:TitlesAndSuffixesTemplateEditor.DeleteTitle}" Executed="DeleteTitle_Executed"/>
+        <CommandBinding Command="{x:Static local:TitlesAndSuffixesTemplateEditor.AddTitle}" Executed="AddTitle_Executed"/>
+
+        <CommandBinding Command="{x:Static local:TitlesAndSuffixesTemplateEditor.DeleteSuffix}" Executed="DeleteSuffix_Executed"/>
+        <CommandBinding Command="{x:Static local:TitlesAndSuffixesTemplateEditor.AddSuffix}" Executed="AddSuffix_Executed"/>
+    </Window.CommandBindings>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Titles:"/>
+            <ListView ItemsSource="{Binding Titles}" Grid.Row="1">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type s:String}">
+                        <DockPanel>
+                            <Button Command="{x:Static local:TitlesAndSuffixesTemplateEditor.DeleteTitle}" CommandParameter="{Binding}" Style="{StaticResource DeleteButton}" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+            <Button Command="{x:Static local:TitlesAndSuffixesTemplateEditor.AddTitle}" Style="{DynamicResource AddButton}" Grid.Row="2" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+            <Label Content="Suffixes:" Grid.Column="2"/>
+            <ListView ItemsSource="{Binding Suffixes}" Grid.Row="1" Grid.Column="2">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type s:String}">
+                        <DockPanel>
+                            <Button Command="{x:Static local:TitlesAndSuffixesTemplateEditor.DeleteSuffix}" CommandParameter="{Binding}" Style="{StaticResource DeleteButton}" DockPanel.Dock="Right"/>
+                            <TextBlock Text="{Binding}" DockPanel.Dock="Left"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+            </ListView>
+            <Button Command="{x:Static local:TitlesAndSuffixesTemplateEditor.AddSuffix}" Style="{DynamicResource AddButton}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+        </Grid>
+        <Button Click="button_OK_Click" Content="_OK" MinWidth="60" Margin="5" Grid.Column="1" Grid.Row="1"/>
+    </Grid>
+</Window>

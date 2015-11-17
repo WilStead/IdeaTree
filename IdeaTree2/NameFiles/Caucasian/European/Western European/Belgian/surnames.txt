@@ -1,0 +1,200 @@
+﻿Peeters,42
+Janssens,38
+Maes,30
+Jacobs,24
+Mertens,23
+Willems,22
+Goossens,19
+Wouters,19
+Claes,19
+Vermeulen,17
+Hermans,16
+de Smet,16
+Pauwels,16
+Aerts,15
+Martens,15
+Michiels,14
+Dubois,13
+Desmet,13
+de Vos,13
+Dupont,12
+Janssen,12
+Smets,12
+Claeys,12
+van Damme,12
+Hendrickx,12
+Lambert,12
+Stevens,11
+van de Velde,11
+Devos,11
+Coppens,11
+Segers,11
+de Clercq,11
+Lemmens,10
+Smet,10
+de Backer,10
+Wauters,9
+Verhoeven,9
+van den Broeck,9
+Cools,9
+Dumont,8
+Declercq,8
+Timmermans,8
+Moens,8
+Verstraete,8
+Lauwers,8
+de Meyer,8
+de Smedt,8
+Leroy,8
+Martin,8
+Vandenberghe,8
+Verheyen,8
+de Wilde,8
+de Ridder,8
+Vermeiren,7
+Baert,7
+Lenaerts,7
+Jansen,7
+Thys,7
+Geerts,7
+Lambrechts,7
+Cornelis,7
+de Pauw,7
+van den Bossche,7
+Bauwens,7
+Verbeke,7
+Verlinden,7
+Bogaert,7
+Pieters,7
+Bogaerts,7
+Leclercq,7
+Michel,7
+Verschueren,7
+Verstraeten,7
+Lejeune,7
+Denis,7
+Bosmans,7
+Laurent,7
+Petit,6
+de Cock,6
+De,6
+Vandamme,6
+Beckers,6
+Somers,6
+Claessens,6
+Verhaeghe,6
+Vermeersch,6
+Renard,6
+Gerard,6
+Christiaens,6
+Goethals,6
+Simon,6
+van Dyck,6
+Verbruggen,6
+Simons,6
+Heylen,6
+Lemaire,6
+Francois,6
+Wuyts,6
+Lefebvre,6
+Thomas,6
+Marchal,6
+Vos,6
+Verbeeck,6
+Carlier,6
+Callens,6
+Verhaegen,6
+Bertrand,6
+Ceulemans,6
+Smeets,6
+Thijs,6
+Roels,6
+Raes,6
+Lievens,5
+Dierckx,5
+Nijs,5
+Lefevre,5
+Charlier,5
+Deprez,5
+van Acker,5
+D'Hondt,5
+Vercruysse,5
+Moreau,5
+Gielen,5
+de Groote,5
+Vandevelde,5
+Verhelst,5
+de Bruyn,5
+van Hoof,5
+Legrand,5
+Matthys,5
+de Winter,5
+Mortier,5
+Nys,5
+Delvaux,5
+Daems,5
+van den Bergh,5
+Verhulst,5
+de Coninck,5
+de Witte,5
+van Hecke,5
+Fontaine,5
+Leemans,5
+Vercauteren,5
+de Coster,5
+Jans,5
+Huybrechts,5
+de Wit,5
+Mathieu,5
+Andries,5
+Verdonck,5
+Vandewalle,5
+Meert,5
+Swinnen,5
+Marien,5
+van Hove,5
+Deckers,5
+Cuypers,5
+Smits,5
+de Bock,5
+de Decker,5
+Dierickx,5
+Bernard,5
+Adam,5
+Evrard,5
+Declerck,5
+Jacques,5
+Vercammen,5
+Luyten,5
+Vanneste,5
+Coenen,5
+Peters,5
+Geens,5
+Dewulf,5
+van den Berghe,5
+de Bruyne,5
+Mahieu,5
+Vervoort,5
+Goris,5
+Engels,5
+de Keyser,4
+Parmentier,4
+Meeus,4
+de Boeck,4
+Engelen,4
+Lambrecht,4
+de Wolf,4
+Vandeputte,4
+Verheyden,4
+de Clerck,4
+Robert,4
+Dhondt,4
+van Daele,4
+Vandendriessche,4
+Vermeire,4
+Bekaert,4
+Houben,4
+Herman,4
+Moons,4
+Luyckx,4
+Temmerman,4

@@ -1,0 +1,1377 @@
+﻿<RibbonWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:local="clr-namespace:IdeaTree2"
+    xmlns:settings="clr-namespace:IdeaTree2.Properties"
+    x:Class="IdeaTree2.MainWindow"
+    mc:Ignorable="d"
+    
+    Title="{Binding Title}"
+    Icon="pack://application:,,,/Icons/Tree32.png"
+    Background="#FFB4D7FA"
+    
+    AllowDrop="True"
+    DragEnter="Window_DragEnter"
+    Drop="Window_Drop"
+    
+    MinWidth="800" MinHeight="600"
+    Height="{Binding Source={x:Static settings:Settings.Default}, Path=Height, Mode=TwoWay}"
+    Width="{Binding Source={x:Static settings:Settings.Default}, Path=Width, Mode=TwoWay}"
+    Left="{Binding Source={x:Static settings:Settings.Default}, Path=Left, Mode=TwoWay}"
+    Top="{Binding Source={x:Static settings:Settings.Default}, Path=Top, Mode=TwoWay}"
+    
+    Closing="Window_Closing"
+    Loaded="Window_Loaded"
+    StateChanged="Window_StateChanged">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <local:RelationshipNameConverter x:Key="RelationshipNameConverter"/>
+        <local:GenderColorConverter x:Key="GenderColorConverter"/>
+        <local:RelationshipBoolConverter x:Key="RelationshipBoolConverter"/>
+
+        <Style x:Key="TextStyleButton" TargetType="Button">
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TextMenuItem" TargetType="MenuItem">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TextSeparator" TargetType="Separator">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SelectedSeparator" TargetType="Separator">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SelectedMenuItem" TargetType="MenuItem">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CharacterMenuItem" TargetType="MenuItem">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CharacterSeparator" TargetType="Separator">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SelectedRibbonMenuItem" TargetType="RibbonMenuItem">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SelectedRibbonMenuButton" TargetType="RibbonMenuButton">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TextRibbonMenuItem" TargetType="RibbonMenuItem">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TextRibbonMenuButton" TargetType="RibbonMenuButton">
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TextRibbonButton" TargetType="RibbonButton">
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CharacterRibbonMenuItem" TargetType="RibbonMenuItem">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <HierarchicalDataTemplate x:Key="RelationshipMenuItemTemplate" DataType="{x:Type local:CharacterRelationshipOption}" ItemsSource="{Binding ChildOptions}">
+            <MenuItem Header="{Binding Name}" Command="{x:Static local:MainWindow.AddFamilyMember}" CommandParameter="{Binding}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/add_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </HierarchicalDataTemplate>
+
+        <ContextMenu x:Key="NoteTreeContextMenu">
+            <MenuItem Header="Add Child Note" Style="{StaticResource SelectedMenuItem}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/add_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="_Text Note" Command="{x:Static local:MainWindow.NewChildText}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Image Note" Command="{x:Static local:MainWindow.NewChildImage}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-view-preview-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Media Note" Command="{x:Static local:MainWindow.NewChildMedia}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-tool-animator-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Story Note" Command="{x:Static local:MainWindow.NewChildStory}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-bookmarks-organize-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Character Note" Command="{x:Static local:MainWindow.NewChildCharacter}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Apps-system-users-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Timeline Note" Command="{x:Static local:MainWindow.NewChildTimeline}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-view-calendar-day-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_File Note" Command="{x:Static local:MainWindow.NewChildFile}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Add Sibling Note">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/add_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="_Text Note" Command="{x:Static local:MainWindow.NewSiblingText}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Image Note" Command="{x:Static local:MainWindow.NewSiblingImage}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-view-preview-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Media Note" Command="{x:Static local:MainWindow.NewSiblingMedia}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-tool-animator-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Story Note" Command="{x:Static local:MainWindow.NewSiblingStory}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-bookmarks-organize-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Character Note" Command="{x:Static local:MainWindow.NewSiblingCharacter}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Apps-system-users-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Timeline Note" Command="{x:Static local:MainWindow.NewSiblingTimeline}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-view-calendar-day-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_File Note" Command="{x:Static local:MainWindow.NewSiblingFile}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Family Tree">
+                <MenuItem Header="New Family" Command="{x:Static local:MainWindow.NewFamily}" Style="{StaticResource CharacterMenuItem}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Add to Family" Style="{StaticResource CharacterMenuItem}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/add_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Random Relatives" Command="{x:Static local:MainWindow.AddFamilyOnly}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Random Relatives and Associates" Command="{x:Static local:MainWindow.AddFamilyAndAssociates}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Random Children" Command="{x:Static local:MainWindow.GenerateChildren}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Random Siblings" Command="{x:Static local:MainWindow.GenerateSiblings}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Random Non-Family Associates" Command="{x:Static local:MainWindow.AddNonFamilyAssociates}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Single Related Character" ItemsSource="{Binding Template.CharacterTemplate.Relationships.ChildOptions}"
+                                  ItemTemplate="{StaticResource RelationshipMenuItemTemplate}">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Icons/add_16.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Clear Family" Command="{x:Static local:MainWindow.ClearFamily}" Style="{StaticResource CharacterMenuItem}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/delete_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Style="{StaticResource CharacterSeparator}"/>
+                <MenuItem Command="{x:Static local:MainWindow.AddOrChangeRelationship}">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Header" Value="Change Relationship"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote"/>
+                                        <Condition Binding="{Binding CurrentIdeaNote.Parent.IdeaNoteType}" Value="CharacterNote"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Header">
+                                        <Setter.Value>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Change Relationship with ">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding CurrentCharacterNote.Relationship}" Value="{x:Null}">
+                                                                    <Setter Property="Text" Value="Add a Relationship with "/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding CurrentCharacterNote.Parent.Name}"/>
+                                            </StackPanel>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Command="{x:Static local:MainWindow.RemoveRelationship}">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Header" Value="Remove Relationship"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote"/>
+                                        <Condition Binding="{Binding CurrentIdeaNote, Converter={StaticResource RelationshipBoolConverter}}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Header">
+                                        <Setter.Value>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Remove Relationship with "/>
+                                                <TextBlock Text="{Binding CurrentCharacterNote.Parent.Name}"/>
+                                            </StackPanel>
+                                        </Setter.Value>
+                                    </Setter>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <Separator Style="{StaticResource CharacterSeparator}"/>
+                <MenuItem Header="Edit Relationships..." Command="{x:Static local:MainWindow.EditRelationships}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-mail-mark-task-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Rename Note..." Command="{x:Static local:MainWindow.RenameNote}">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/Actions-edit-rename-icon_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Move Note">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/arrow-forward_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Move Note Up" Command="{x:Static local:MainWindow.MoveNoteUp}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/arrow-up_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Make Note First" Command="{x:Static local:MainWindow.MakeNoteFirst}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/double_arrow-up_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Move Note Down" Command="{x:Static local:MainWindow.MoveNoteDown}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/arrow-down_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Make Note Last" Command="{x:Static local:MainWindow.MakeNoteLast}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/double_arrow-down_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Promote Note" Command="{x:Static local:MainWindow.PromoteNote}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/arrow-back_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Make Note Top-Level" Command="{x:Static local:MainWindow.MakeNoteTop}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/double_arrow-back_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Demote Note" Command="{x:Static local:MainWindow.DemoteNote}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/arrow-forward_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="C_ut Note">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Current _Note Only (Promote Children)" Command="{x:Static local:MainWindow.CutSingleNote}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Current Note and Its _Children" Command="ApplicationCommands.Cut">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Copy Note">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Current _Note Only" Command="{x:Static local:MainWindow.CopySingleNote}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Current Note and Its _Children" Command="ApplicationCommands.Copy">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Paste into Tree" ToolTip="Notes, files, and text can all be pasted into the Note tree">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="As a _Sibling" Command="ApplicationCommands.Paste">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="As a _Child" Command="{x:Static local:MainWindow.PasteInTreeAsChild}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Delete Note">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Icons/delete_16.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+                <MenuItem Header="_Delete Single Note" Command="{x:Static local:MainWindow.DeleteSingleNote}" InputGestureText="Del">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/delete_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Delete Entire Branch" ToolTip="Deletes the current Note and all its children" Command="{x:Static local:MainWindow.DeleteNoteBranch}">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Icons/delete_16.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Expan_d Note" ToolTip="Fully expand this Note and its children" Command="{x:Static local:MainWindow.ExpandNote}"/>
+            <MenuItem Header="Co_llapse Note" ToolTip="Fully collapse this Note and its children" Command="{x:Static local:MainWindow.CollapseNote}"/>
+            <Separator/>
+            <MenuItem Header="E_xport" ToolTip="Save Note(s) as an XML file">
+                <MenuItem Header="_Current Note Only..." Command="{x:Static local:MainWindow.ExportNote}"/>
+                <MenuItem Header="_Current Note and Its Children..." Command="{x:Static local:MainWindow.ExportBranch}"/>
+                <Separator Style="{StaticResource TextSeparator}"/>
+                <MenuItem Header="As _Rich Text (.rtf) ..." Command="{x:Static local:MainWindow.ExportNoteAsRtf}" Style="{StaticResource TextMenuItem}"/>
+                <MenuItem Header="As Plain _Text (.txt) ..." Command="{x:Static local:MainWindow.ExportNoteAsTxt}" Style="{StaticResource TextMenuItem}"/>
+            </MenuItem>
+            <MenuItem Header="_Import" ToolTip="Load an IdeaTree-compatible file as a new Note in the current file">
+                <MenuItem Header="As a _Sibling..." Command="{x:Static local:MainWindow.ImportAsSibling}"/>
+                <MenuItem Header="As a _Child..." Command="{x:Static local:MainWindow.ImportAsChild}"/>
+            </MenuItem>
+            <Separator>
+                <Separator.Style>
+                    <Style TargetType="Separator">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Separator.Style>
+            </Separator>
+            <MenuItem Header="Con_vert to Text Note" ToolTip="Change the current Note to a Text Note, preserving its content as a text-only equivalent"
+                          Command="{x:Static local:MainWindow.ConvertToTextNote}">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Command="ApplicationCommands.New" Gesture="Ctrl+N"/>
+        <KeyBinding Command="ApplicationCommands.Open" Gesture="Ctrl+O"/>
+        <KeyBinding Command="ApplicationCommands.Save" Gesture="Ctrl+S"/>
+        <KeyBinding Command="ApplicationCommands.SaveAs" Gesture="Ctrl+Shift+S"/>
+        <KeyBinding Command="ApplicationCommands.Print" Gesture="Ctrl+P"/>
+        <KeyBinding Command="ApplicationCommands.Close" Gesture="Ctrl+F4"/>
+        <KeyBinding Command="ApplicationCommands.Undo" Gesture="Ctrl+Z"/>
+        <KeyBinding Command="ApplicationCommands.Redo" Gesture="Ctrl+Y"/>
+        <KeyBinding Command="ApplicationCommands.Cut" Gesture="Ctrl+X"/>
+        <KeyBinding Command="ApplicationCommands.Copy" Gesture="Ctrl+C"/>
+        <KeyBinding Command="ApplicationCommands.Paste" Gesture="Ctrl+V"/>
+        <KeyBinding Command="ApplicationCommands.SelectAll" Gesture="Ctrl+A"/>
+        <KeyBinding Command="ApplicationCommands.Delete" Gesture="Del"/>
+        <KeyBinding Command="{x:Static local:MainWindow.ConvertCase}" Gesture="Ctrl+K"/>
+        <KeyBinding Command="ApplicationCommands.Find" Gesture="Ctrl+F"/>
+        <KeyBinding Command="{x:Static local:MainWindow.FindNext}" Gesture="F3"/>
+        <KeyBinding Command="{x:Static local:MainWindow.FindPrev}" Gesture="Shift+F3"/>
+        <KeyBinding Command="EditingCommands.ToggleBold" Gesture="Ctrl+B"/>
+        <KeyBinding Command="EditingCommands.ToggleItalic" Gesture="Ctrl+I"/>
+        <KeyBinding Command="EditingCommands.ToggleUnderline" Gesture="Ctrl+U"/>
+        <KeyBinding Command="{x:Static local:MainWindow.InsertEnDash}" Gesture="Ctrl+Shift+OemMinus"/>
+        <KeyBinding Command="{x:Static local:MainWindow.InsertEmDash}" Gesture="Ctrl+OemMinus"/>
+        <KeyBinding Command="{x:Static local:MainWindow.InsertEllipsis}" Gesture="Ctrl+OemPeriod"/>
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+        
+        <!--#region File Operations -->
+        
+        <CommandBinding Command="ApplicationCommands.New" Executed="NewCommand"/>
+        <CommandBinding Command="ApplicationCommands.Open" Executed="OpenCommand"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="SaveCommand" CanExecute="CanSave"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveAsCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.Revert}" Executed="RevertCommand" CanExecute="CanSave"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewTemplate}" Executed="NewTemplateCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.LoadTemplate}" Executed="LoadTemplateCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.DefaultTemplate}" Executed="DefaultTemplateCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.SetPassword}" Executed="SetPasswordCommand"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommand"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.ExportNote}" Executed="ExportNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ExportBranch}" Executed="ExportBranchCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ExportNoteAsRtf}" Executed="ExportNoteAsRtfCommand" CanExecute="CanExecuteTextNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ExportNoteAsTxt}" Executed="ExportNoteAsTxtCommand" CanExecute="CanExecuteTextNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ImportAsSibling}" Executed="ImportAsSiblingCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ImportAsChild}" Executed="ImportAsChildCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <!--#endregion File Operations -->
+
+        <CommandBinding Command="ApplicationCommands.Undo" Executed="UndoCommand" CanExecute="CanUndo"/>
+        <CommandBinding Command="ApplicationCommands.Redo" Executed="RedoCommand" CanExecute="CanRedo"/>
+
+        <!--#region Notes -->
+        
+        <!--#region Tree Operations -->
+        
+        <!--#region New Notes -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildText}" Executed="NewChildTextCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildImage}" Executed="NewChildImageCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildMedia}" Executed="NewChildMediaCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildStory}" Executed="NewChildStoryCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildCharacter}" Executed="NewChildCharacterCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildTimeline}" Executed="NewChildTimelineCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewChildFile}" Executed="NewChildFileCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingText}" Executed="NewSiblingTextCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingImage}" Executed="NewSiblingImageCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingMedia}" Executed="NewSiblingMediaCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingStory}" Executed="NewSiblingStoryCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingCharacter}" Executed="NewSiblingCharacterCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingTimeline}" Executed="NewSiblingTimelineCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.NewSiblingFile}" Executed="NewSiblingFileCommand"/>
+
+        <!--#endregion New Notes -->
+        
+        <!--#region Moving Notes -->
+        
+        <CommandBinding Command="{x:Static local:MainWindow.MoveNoteUp}" Executed="MoveNoteUpCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.MakeNoteFirst}" Executed="MakeNoteFirstCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.MoveNoteDown}" Executed="MoveNoteDownCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.MakeNoteLast}" Executed="MakeNoteLastCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.PromoteNote}" Executed="PromoteNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.MakeNoteTop}" Executed="MakeNoteTopCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.DemoteNote}" Executed="DemoteNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <!--#endregion Moving Notes -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.DeleteSingleNote}" Executed="DeleteSingleNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.DeleteNoteBranch}" Executed="DeleteNoteBranchCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <CommandBinding Command="{x:Static local:MainWindow.ExpandAll}" Executed="ExpandAllCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ExpandNote}" Executed="ExpandNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CollapseAll}" Executed="CollapseAllCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CollapseNote}" Executed="CollapseNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <!--#endregion Tree Operations -->
+        
+        <CommandBinding Command="{x:Static local:MainWindow.RenameNote}" Executed="RenameNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        
+        <!--#region Copying Names -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.CopyTopLevelNoteNames}" Executed="CopyTopLevelNoteNamesCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CopyTreeNoteNames}" Executed="CopyTreeNoteNamesCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CopyNoteName}" Executed="CopyNoteNameCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CopyNoteChildrenNames}" Executed="CopyNoteChildrenNamesCommand" CanExecute="CanExecuteNoteCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.CopyBranchNames}" Executed="CopyBranchNamesCommand" CanExecute="CanExecuteNoteCommand"/>
+
+        <!--#endregion Copying Names -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.ConvertToTextNote}" Executed="ConvertToTextNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+        
+        <CommandBinding Command="{x:Static local:MainWindow.FindInTree}" Executed="FindInTreeCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.FindNextInTree}" Executed="FindNextInTreeCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.FindPrevInTree}" Executed="FindPrevInTreeCommand"/>
+        
+        <!--#region Character Notes -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.NewFamily}" Executed="NewFamilyCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.AddFamilyOnly}" Executed="AddFamilyOnlyCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.AddFamilyAndAssociates}" Executed="AddFamilyAndAssociatesCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.AddFamilyMember}" Executed="AddFamilyMemberCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.GenerateChildren}" Executed="GenerateChildrenCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.GenerateSiblings}" Executed="GenerateSiblingsCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.AddNonFamilyAssociates}" Executed="AddNonFamilyAssociatesCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ClearFamily}" Executed="ClearFamilyCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.AddOrChangeRelationship}" Executed="AddOrChangeRelationshipCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.RemoveRelationship}" Executed="RemoveRelationshipCommand"/>
+        <CommandBinding Command="{x:Static local:MainWindow.EditRelationships}" Executed="EditRelationshipsCommand"/>
+
+        <!--#endregion Character Notes -->
+
+        <CommandBinding Command="{x:Static local:MainWindow.GenreCheck}" Executed="GenreCheckCommand"/>
+
+        <!--#endregion Notes -->
+        
+    </Window.CommandBindings>
+
+    <xctk:BusyIndicator x:Name="busyIndicator_main">
+        <DockPanel>
+            <Ribbon DockPanel.Dock="Top">
+                <Ribbon.QuickAccessToolBar>
+                    <RibbonQuickAccessToolBar>
+                        <RibbonButton Command="ApplicationCommands.Save" ToolTip="Save" SmallImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                        <RibbonButton Command="ApplicationCommands.Undo" ToolTip="Undo" SmallImageSource="pack://application:,,,/Icons/Actions-edit-undo-icon_16.png"/>
+                        <RibbonButton Command="ApplicationCommands.Redo" ToolTip="Redo" SmallImageSource="pack://application:,,,/Icons/Actions-edit-redo-icon_16.png"/>
+                    </RibbonQuickAccessToolBar>
+                </Ribbon.QuickAccessToolBar>
+                <Ribbon.ApplicationMenu>
+                    <RibbonApplicationMenu SmallImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png" KeyTip="F">
+                        <RibbonApplicationMenuItem Header="_New" Command="ApplicationCommands.New" ImageSource="pack://application:,,,/Icons/Actions-document-new-icon_16.png"/>
+                        <RibbonApplicationMenuItem Header="_Open" Command="ApplicationCommands.Open" ImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"/>
+                        <RibbonApplicationMenuItem Header="_Save" Command="ApplicationCommands.Save" IsEnabled="{Binding SaveFile.ChangedSinceLastSave}"
+                                                   ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                        <RibbonApplicationMenuItem Header="Save _As..." Command="ApplicationCommands.SaveAs" InputGestureText="Ctrl+Shift+S"
+                                                   ImageSource="pack://application:,,,/Icons/Actions-document-save-as-icon_16.png"/>
+                        <RibbonApplicationMenuItem Header="Revert to Last Save" KeyTip="R" Command="{x:Static local:MainWindow.Revert}" IsEnabled="{Binding SaveFile.ChangedSinceLastSave}"
+                                                   ImageSource="pack://application:,,,/Icons/Actions-document-revert-icon_16.png"
+                                                   ToolTipTitle="Revert to Last Save" ToolTipDescription="Undo all changes made since this file was last opened or saved."
+                                                   ToolTipImageSource="pack://application:,,,/Icons/Actions-document-revert-icon_32.png"/>
+                        <Separator/>
+                        <RibbonApplicationMenuItem Header="New _Template..." Command="{x:Static local:MainWindow.NewTemplate}" ImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_16.png"
+                                                   ToolTipTitle="New Template" ToolTipDescription="Saves a copy of the current template, and makes it the current template"
+                                                   ToolTipImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_32.png"/>
+                        <RibbonApplicationMenuItem Header="_Load Template..." Command="{x:Static local:MainWindow.LoadTemplate}" ImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_16.png"
+                                                   ToolTipTitle="Load Template" ToolTip="Replaces the current template with one loaded from a file."
+                                                   ToolTipImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_32.png"/>
+                        <RibbonApplicationMenuItem Header="Use _Default Template" Command="{x:Static local:MainWindow.DefaultTemplate}" ImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_16.png"
+                                                   ToolTipTitle="Use Default Template" ToolTip="Replaces the current template with the default."
+                                                   ToolTipImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_32.png"/>
+                        <Separator/>
+                        <RibbonApplicationMenuItem Header="Set Pass_word..." Command="{x:Static local:MainWindow.SetPassword}"
+                                                   ImageSource="pack://application:,,,/Icons/Actions-document-encrypt-icon_16.png"
+                                                   ToolTipTitle="Set Password" ToolTipDescription="Add or change a password for this file."
+                                                   ToolTipImageSource="pack://application:,,,/Icons/Actions-document-encrypt-icon_32.png"/>
+                        <Separator/>
+                        <RibbonApplicationMenuItem Header="E_xit" Command="ApplicationCommands.Close" InputGestureText="Ctrl+F4" ImageSource="pack://application:,,,/Icons/Actions-application-exit-icon_16.png"/>
+                    </RibbonApplicationMenu>
+                </Ribbon.ApplicationMenu>
+                <RibbonTab Header="Home" KeyTip="H">
+                    <RibbonGroup Header="Edit">
+                        <RibbonSplitButton Label="Paste" KeyTip="V" Command="ApplicationCommands.Paste" LargeImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_32.png"
+                                           SmallImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png">
+                            <RibbonMenuItem Header="Paste as Plain Text" KeyTip="P" Command="{x:Static local:MainWindow.PastePlainText}" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                            Style="{StaticResource TextRibbonMenuItem}" ImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png"/>
+                            <RibbonMenuItem Header="Paste as a Link" KeyTip="L" Command="{x:Static local:MainWindow.PasteLink}" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                            Style="{StaticResource TextRibbonMenuItem}" ImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png"/>
+                        </RibbonSplitButton>
+                        <RibbonButton Label="Cut" KeyTip="X" Command="ApplicationCommands.Cut" SmallImageSource="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png"/>
+                        <RibbonButton Label="Copy" KeyTip="C" Command="ApplicationCommands.Copy" SmallImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                        <RibbonButton Label="Select All" KeyTip="SA" Command="ApplicationCommands.SelectAll" SmallImageSource="pack://application:,,,/Icons/Actions-edit-select-all-icon_16.png"/>
+                    </RibbonGroup>
+                    <RibbonGroup Header="Tree">
+                        <RibbonControlGroup>
+                            <RibbonControlGroup.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </RibbonControlGroup.ItemsPanel>
+                            <RibbonMenuButton HorizontalContentAlignment="Left" Label="Add Child Note" KeyTip="AC" Style="{StaticResource SelectedRibbonMenuButton}"
+                                              SmallImageSource="pack://application:,,,/Icons/add_16.png">
+                                <RibbonMenuItem Header="_Text Note" Command="{x:Static local:MainWindow.NewChildText}"
+                                                ImageSource="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"/>
+                                <RibbonMenuItem Header="_Image Note" Command="{x:Static local:MainWindow.NewChildImage}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-view-preview-icon_16.png"/>
+                                <RibbonMenuItem Header="_Media Note" Command="{x:Static local:MainWindow.NewChildMedia}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tool-animator-icon_16.png"/>
+                                <RibbonMenuItem Header="_Story Note" Command="{x:Static local:MainWindow.NewChildStory}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-bookmarks-organize-icon_16.png"/>
+                                <RibbonMenuItem Header="_Character Note" Command="{x:Static local:MainWindow.NewChildCharacter}"
+                                                ImageSource="pack://application:,,,/Icons/Apps-system-users-icon_16.png"/>
+                                <RibbonMenuItem Header="_Timeline Note" Command="{x:Static local:MainWindow.NewChildTimeline}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-view-calendar-day-icon_16.png"/>
+                                <RibbonMenuItem Header="_File Note" Command="{x:Static local:MainWindow.NewChildFile}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                            </RibbonMenuButton>
+                            <RibbonMenuButton Label="Add Sibling Note" KeyTip="AS" SmallImageSource="pack://application:,,,/Icons/add_16.png">
+                                <RibbonMenuItem Header="_Text Note" Command="{x:Static local:MainWindow.NewSiblingText}"
+                                                ImageSource="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"/>
+                                <RibbonMenuItem Header="_Image Note" Command="{x:Static local:MainWindow.NewSiblingImage}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-view-preview-icon_16.png"/>
+                                <RibbonMenuItem Header="_Media Note" Command="{x:Static local:MainWindow.NewSiblingMedia}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tool-animator-icon_16.png"/>
+                                <RibbonMenuItem Header="_Story Note" Command="{x:Static local:MainWindow.NewSiblingStory}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-bookmarks-organize-icon_16.png"/>
+                                <RibbonMenuItem Header="_Character Note" Command="{x:Static local:MainWindow.NewSiblingCharacter}"
+                                                ImageSource="pack://application:,,,/Icons/Apps-system-users-icon_16.png"/>
+                                <RibbonMenuItem Header="_Timeline Note" Command="{x:Static local:MainWindow.NewSiblingTimeline}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-view-calendar-day-icon_16.png"/>
+                                <RibbonMenuItem Header="_File Note" Command="{x:Static local:MainWindow.NewSiblingFile}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                            </RibbonMenuButton>
+                        </RibbonControlGroup>
+                        <RibbonMenuButton Label="Family Tree" KeyTip="FT" SmallImageSource="pack://application:,,,/Icons/Apps-system-users-icon_16.png">
+                            <RibbonMenuItem Header="New Family" KeyTip="NF" Command="{x:Static local:MainWindow.NewFamily}" Style="{StaticResource CharacterRibbonMenuItem}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                            <RibbonMenuItem Header="Add to Family" KeyTip="AF" Style="{StaticResource CharacterRibbonMenuItem}" ImageSource="pack://application:,,,/Icons/add_16.png">
+                                <RibbonMenuItem Header="Random Relatives" KeyTip="R" Command="{x:Static local:MainWindow.AddFamilyOnly}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                                <RibbonMenuItem Header="Random Relatives and Associates" KeyTip="A" Command="{x:Static local:MainWindow.AddFamilyAndAssociates}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                                <Separator/>
+                                <RibbonMenuItem Header="Random Children" KeyTip="C" Command="{x:Static local:MainWindow.GenerateChildren}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                                <RibbonMenuItem Header="Random Siblings" KeyTip="S" Command="{x:Static local:MainWindow.GenerateSiblings}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                                <RibbonMenuItem Header="Random Non-Family Associates" KeyTip="N" Command="{x:Static local:MainWindow.AddNonFamilyAssociates}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png"/>
+                                <Separator/>
+                                <RibbonMenuItem Header="Single Related Character" KeyTip="F" ItemsSource="{Binding Template.CharacterTemplate.Relationships.ChildOptions}"
+                                      ItemTemplate="{StaticResource RelationshipMenuItemTemplate}" ImageSource="pack://application:,,,/Icons/add_16.png"/>
+                            </RibbonMenuItem>
+                            <RibbonMenuItem Header="Clear Family" KeyTip="CF" Command="{x:Static local:MainWindow.ClearFamily}"
+                                            Style="{StaticResource CharacterRibbonMenuItem}" ImageSource="pack://application:,,,/Icons/delete_16.png"/>
+                            <RibbonSeparator>
+                                <RibbonSeparator.Style>
+                                    <Style TargetType="RibbonSeparator">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote"/>
+                                                    <Condition Binding="{Binding CurrentIdeaNote.Parent.IdeaNoteType}" Value="CharacterNote"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RibbonSeparator.Style>
+                            </RibbonSeparator>
+                            <RibbonMenuItem Command="{x:Static local:MainWindow.AddOrChangeRelationship}">
+                                <RibbonMenuItem.Style>
+                                    <Style TargetType="RibbonMenuItem">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Header" Value="Change Relationship"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote"/>
+                                                    <Condition Binding="{Binding CurrentIdeaNote.Parent.IdeaNoteType}" Value="CharacterNote"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Setter Property="Header">
+                                                    <Setter.Value>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock>
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text" Value="Change Relationship with "/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding CurrentCharacterNote.Relationship}" Value="{x:Null}">
+                                                                                <Setter Property="Text" Value="Add a Relationship with "/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                            <TextBlock Text="{Binding CurrentCharacterNote.Parent.Name}"/>
+                                                        </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RibbonMenuItem.Style>
+                            </RibbonMenuItem>
+                            <RibbonMenuItem Command="{x:Static local:MainWindow.RemoveRelationship}">
+                                <RibbonMenuItem.Style>
+                                    <Style TargetType="RibbonMenuItem">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Header" Value="Remove Relationship"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote"/>
+                                                    <Condition Binding="{Binding CurrentIdeaNote, Converter={StaticResource RelationshipBoolConverter}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Setter Property="Header">
+                                                    <Setter.Value>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="Remove Relationship with "/>
+                                                            <TextBlock Text="{Binding CurrentCharacterNote.Parent.Name}"/>
+                                                        </StackPanel>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RibbonMenuItem.Style>
+                            </RibbonMenuItem>
+                            <RibbonSeparator>
+                                <RibbonSeparator.Style>
+                                    <Style TargetType="RibbonSeparator">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="CharacterNote">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RibbonSeparator.Style>
+                            </RibbonSeparator>
+                            <RibbonMenuItem Header="Edit Relationships..." KeyTip="ER" Command="{x:Static local:MainWindow.EditRelationships}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-mail-mark-task-icon_32.png"/>
+                        </RibbonMenuButton>
+                        <RibbonToggleButton Label="Show Genre Explorer" KeyTip="G" Unchecked="MenuItem_GenreExplorer_Checked" Checked="MenuItem_GenreExplorer_Checked"
+                                        SmallImageSource="pack://application:,,,/Icons/Actions-view-filter-icon_16.png"
+                                        ToolTipTitle="Show/Hide the Genre Explorer"
+                                        ToolTipDescription="Show/Hide the Genre Explorer to filter Story Notes by genre."
+                                        ToolTipImageSource="pack://application:,,,/Icons/Actions-view-filter-icon_16.png"/>
+                        <RibbonControlGroup>
+                            <RibbonButton Label="Expand All" KeyTip="E" Command="{x:Static local:MainWindow.ExpandAll}"
+                                              SmallImageSource="pack://application:,,,/Icons/add_16.png"/>
+                            <RibbonButton Label="Collapse All" KeyTip="P" Command="{x:Static local:MainWindow.CollapseAll}"
+                                              SmallImageSource="pack://application:,,,/Icons/delete_16.png"/>
+                        </RibbonControlGroup>
+                        <RibbonMenuButton Label="Copy Names" KeyTip="TC" SmallImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png">
+                            <RibbonMenuItem Header="_Top-Level Notes Only" Command="{x:Static local:MainWindow.CopyTopLevelNoteNames}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonMenuItem Header="_Full Tree" Command="{x:Static local:MainWindow.CopyTreeNoteNames}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonSeparator>
+                                <RibbonSeparator.Style>
+                                    <Style TargetType="RibbonSeparator">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentIdeaNote}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </RibbonSeparator.Style>
+                            </RibbonSeparator>
+                            <RibbonMenuItem Header="Selected _Note Only" Command="{x:Static local:MainWindow.CopyNoteName}" Style="{StaticResource SelectedRibbonMenuItem}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonMenuItem Header="Selected Note's _Children Only" Command="{x:Static local:MainWindow.CopyNoteChildrenNames}" Style="{StaticResource SelectedRibbonMenuItem}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonMenuItem Header="Selected Note _and Its Children" Command="{x:Static local:MainWindow.CopyBranchNames}" Style="{StaticResource SelectedRibbonMenuItem}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                        </RibbonMenuButton>
+                    </RibbonGroup>
+                    <RibbonGroup Header="Note">
+                        <RibbonSplitButton Label="Paste into Tree" KeyTip="NV" Command="ApplicationCommands.Paste"
+                                           LargeImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_32.png"
+                                           SmallImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png"
+                                           ToolTipTitle="Paste into Tree"
+                                           ToolTipDescription="Notes, files, and text can all be pasted into the Note tree"
+                                           ToolTipImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_32.png">
+                            <RibbonMenuItem Header="As a _Sibling" Command="ApplicationCommands.Paste"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png"/>
+                            <RibbonMenuItem Header="As a _Child" Command="{x:Static local:MainWindow.PasteInTreeAsChild}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-paste-icon_16.png"/>
+                        </RibbonSplitButton>
+                        <RibbonSplitButton Label="Cut Note" KeyTip="NX" Command="ApplicationCommands.Cut" SmallImageSource="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png">
+                            <RibbonMenuItem Header="Current _Note Only (Promote Children)" Command="{x:Static local:MainWindow.CutSingleNote}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png"/>
+                            <RibbonMenuItem Header="Current Note and Its _Children" Command="ApplicationCommands.Cut"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-cut-icon_16.png"/>
+                        </RibbonSplitButton>
+                        <RibbonSplitButton Label="Copy Note" KeyTip="NC" Command="ApplicationCommands.Copy" SmallImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png">
+                            <RibbonMenuItem Header="Current _Note Only" Command="{x:Static local:MainWindow.CopySingleNote}"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonMenuItem Header="Current Note and Its _Children" Command="ApplicationCommands.Copy"
+                                            ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                        </RibbonSplitButton>
+                        <RibbonSplitButton Label="Delete Note" KeyTip="ND" SmallImageSource="pack://application:,,,/Icons/delete_16.png"
+                                           Command="ApplicationCommands.Delete" CommandTarget="{Binding ElementName=noteTreeView}">
+                            <RibbonMenuItem Header="_Delete Single Note" Command="{x:Static local:MainWindow.DeleteSingleNote}"
+                                            ImageSource="pack://application:,,,/Icons/delete_16.png"/>
+                            <RibbonMenuItem Header="_Delete Entire Branch" Command="{x:Static local:MainWindow.DeleteNoteBranch}"
+                                            ImageSource="pack://application:,,,/Icons/delete_16.png"
+                                            ToolTipTitle="Delete Entire Branch"
+                                            ToolTipDescription="Deletes the current Note and all its children."
+                                            ToolTipImageSource="pack://application:,,,/Icons/delete_16.png"/>
+                        </RibbonSplitButton>
+                        <RibbonButton Label="Rename Note..." KeyTip="R" Command="{x:Static local:MainWindow.RenameNote}" SmallImageSource="pack://application:,,,/Icons/Actions-edit-rename-icon_16.png"/>
+                        <RibbonMenuButton Label="Move Note" KeyTip="M" SmallImageSource="pack://application:,,,/Icons/arrow-forward_16.png">
+                            <RibbonMenuItem Header="Move Note _Up" Command="{x:Static local:MainWindow.MoveNoteUp}" ImageSource="pack://application:,,,/Icons/arrow-up_16.png"/>
+                            <RibbonMenuItem Header="Make Note _First" Command="{x:Static local:MainWindow.MakeNoteFirst}" ImageSource="pack://application:,,,/Icons/double_arrow-up_16.png"/>
+                            <RibbonSeparator/>
+                            <RibbonMenuItem Header="Move Note _Down" Command="{x:Static local:MainWindow.MoveNoteDown}" ImageSource="pack://application:,,,/Icons/arrow-down_16.png"/>
+                            <RibbonMenuItem Header="Make Note _Last" Command="{x:Static local:MainWindow.MakeNoteLast}" ImageSource="pack://application:,,,/Icons/double_arrow-down_16.png"/>
+                            <RibbonSeparator/>
+                            <RibbonMenuItem Header="_Promote Note" Command="{x:Static local:MainWindow.PromoteNote}" ImageSource="pack://application:,,,/Icons/arrow-back_16.png"/>
+                            <RibbonMenuItem Header="Make Note _Top-Level" Command="{x:Static local:MainWindow.MakeNoteTop}" ImageSource="pack://application:,,,/Icons/double_arrow-back_16.png"/>
+                            <RibbonSeparator/>
+                            <RibbonMenuItem Header="De_mote Note" Command="{x:Static local:MainWindow.DemoteNote}" ImageSource="pack://application:,,,/Icons/arrow-forward_16.png"/>
+                        </RibbonMenuButton>
+                        <RibbonControlGroup>
+                            <RibbonButton Label="Expand Note" KeyTip="NE" Command="{x:Static local:MainWindow.ExpandNote}"
+                                          SmallImageSource="pack://application:,,,/Icons/add_16.png"
+                                          ToolTipTitle="Expand Note"
+                                          ToolTipDescription="Fully expand this Note and its children."
+                                          ToolTipImageSource="pack://application:,,,/Icons/add_16.png"/>
+                            <RibbonButton Label="Collapse Note" KeyTip="NP" Command="{x:Static local:MainWindow.CollapseNote}"
+                                      SmallImageSource="pack://application:,,,/Icons/delete_16.png"
+                                      ToolTipTitle="Collapse Note"
+                                      ToolTipDescription="Fully collapse this Note and its children."
+                                      ToolTipImageSource="pack://application:,,,/Icons/delete_16.png"/>
+                        </RibbonControlGroup>
+                        <RibbonControlGroup>
+                            <RibbonMenuButton Label="Export" KeyTip="NX" SmallImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"
+                                              ToolTipTitle="Export"
+                                              ToolTipDescription="Saves an individual Note, or an entire branch of the tree, as an independent file. These files can then be imported into this tree, or into others."
+                                              ToolTipImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png">
+                                <RibbonMenuItem Header="_Current Note Only..." Command="{x:Static local:MainWindow.ExportNote}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                                <RibbonMenuItem Header="_Current Note and Its Children..." Command="{x:Static local:MainWindow.ExportBranch}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                                <RibbonSeparator>
+                                    <RibbonSeparator.Style>
+                                        <Style TargetType="RibbonSeparator">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RibbonSeparator.Style>
+                                </RibbonSeparator>
+                                <RibbonMenuItem Header="As _Rich Text (.rtf) ..." Command="{x:Static local:MainWindow.ExportNoteAsRtf}" Style="{StaticResource TextRibbonMenuItem}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                                <RibbonMenuItem Header="As Plain _Text (.txt) ..." Command="{x:Static local:MainWindow.ExportNoteAsTxt}" Style="{StaticResource TextRibbonMenuItem}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                            </RibbonMenuButton>
+                            <RibbonMenuButton Label="Import" KeyTip="NI" SmallImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"
+                                              ToolTipTitle="Import"
+                                              ToolTipDescription="Load an IdeaTree-compatible file as a new Note in the current file."
+                                              ToolTipImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png">
+                                <RibbonMenuItem Header="As a _Sibling..." Command="{x:Static local:MainWindow.ImportAsSibling}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"/>
+                                <RibbonMenuItem Header="As a _Child..." Command="{x:Static local:MainWindow.ImportAsChild}"
+                                                ImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"/>
+                            </RibbonMenuButton>
+                        </RibbonControlGroup>
+                        <RibbonButton Label="Convert to Text Note" KeyTip="NT" Command="{x:Static local:MainWindow.ConvertToTextNote}"
+                                      SmallImageSource="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"
+                                      ToolTipTitle="Convert to Text Note"
+                                      ToolTipDescription="Change the current Note to a Text Note, preserving its content as a text-only equivalent."
+                                      ToolTipImageSource="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png">
+                            <RibbonButton.Style>
+                                <Style TargetType="RibbonButton">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentIdeaNote.IdeaNoteType}" Value="TextNote">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RibbonButton.Style>
+                        </RibbonButton>
+                    </RibbonGroup>
+                </RibbonTab>
+                <RibbonTab Header="Text" KeyTip="T">
+                    <RibbonGroup Header="Font">
+                        <RibbonControlGroup>
+                            <RibbonComboBox>
+                                <RibbonGallery x:Name="comboBox_FontFamily" SelectionChanged="comboBox_FontFamily_SelectionChanged"
+                                               SelectedItem="{Binding Source={x:Static settings:Settings.Default}, Path=MostRecentFont, Mode=TwoWay}">
+                                    <RibbonGalleryCategory ItemsSource="{Binding Source={StaticResource FontFamilies}}" ItemTemplate="{DynamicResource FontTemplate}"/>
+                                </RibbonGallery>
+                            </RibbonComboBox>
+                            <RibbonComboBox>
+                                <RibbonGallery x:Name="comboBox_FontSize" SelectionChanged="comboBox_FontSize_SelectionChanged">
+                                    <RibbonGalleryCategory MaxColumnCount="1">
+                                        <RibbonGalleryCategory.ItemsSource>
+                                            <x:Array Type="{x:Type s:Int32}">
+                                                <s:Int32>8</s:Int32>
+                                                <s:Int32>9</s:Int32>
+                                                <s:Int32>10</s:Int32>
+                                                <s:Int32>11</s:Int32>
+                                                <s:Int32>12</s:Int32>
+                                                <s:Int32>14</s:Int32>
+                                                <s:Int32>16</s:Int32>
+                                                <s:Int32>18</s:Int32>
+                                                <s:Int32>20</s:Int32>
+                                                <s:Int32>22</s:Int32>
+                                                <s:Int32>24</s:Int32>
+                                                <s:Int32>26</s:Int32>
+                                                <s:Int32>28</s:Int32>
+                                                <s:Int32>36</s:Int32>
+                                                <s:Int32>48</s:Int32>
+                                                <s:Int32>72</s:Int32>
+                                            </x:Array>
+                                        </RibbonGalleryCategory.ItemsSource>
+                                    </RibbonGalleryCategory>
+                                </RibbonGallery>
+                            </RibbonComboBox>
+                        </RibbonControlGroup>
+                        <RibbonControlGroup>
+                            <RibbonToggleButton x:Name="toggleButton_Bold" ToolTip="Bold" Command="EditingCommands.ToggleBold" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                  SmallImageSource="pack://application:,,,/Icons/text-bold-icon.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_Italic" ToolTip="Italic" Command="EditingCommands.ToggleItalic" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                  SmallImageSource="pack://application:,,,/Icons/text-italic-icon.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_Underline" ToolTip="Underline" Command="EditingCommands.ToggleUnderline" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/text-underline-icon.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_Superscript" ToolTip="Superscript" Command="EditingCommands.ToggleSuperscript" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/Superscript.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_Subscript" ToolTip="Subscript" Command="EditingCommands.ToggleSubscript" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/Subscript.png"/>
+                        </RibbonControlGroup>
+                        <xctk:ColorPicker x:Name="colorPicker_textColor" ToolTip="Text Color" Width="40" SelectedColor="Black" SelectedColorChanged="colorPicker_textColor_SelectedColorChanged"/>
+                        <RibbonControlGroup>
+                            <RibbonToggleButton x:Name="toggleButton_alignLeft" ToolTip="Align Left" Command="EditingCommands.AlignLeft"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/leftAlignButton.Image.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_alignCenter" ToolTip="Align Center" Command="EditingCommands.AlignCenter"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/centerAlignButton.Image.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_alignRight" ToolTip="Align Right" Command="EditingCommands.AlignRight"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/rightAlignButton.Image.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_alignJustify" ToolTip="Align Justify" Command="EditingCommands.AlignJustify"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/justifyAlignButton.png"/>
+                        </RibbonControlGroup>
+                        <RibbonControlGroup>
+                            <RibbonToggleButton x:Name="toggleButton_Bullets" ToolTip="Bulleted List" Command="EditingCommands.ToggleBullets"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/List_BulletsHS.png"/>
+                            <RibbonToggleButton x:Name="toggleButton_Numbering" ToolTip="Numbered List" Command="EditingCommands.ToggleNumbering"
+                                                CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                                SmallImageSource="pack://application:,,,/Icons/List_NumberedHS.png"/>
+                        </RibbonControlGroup>
+                        <RibbonControlGroup>
+                            <RibbonButton ToolTip="Increase Indent" Command="EditingCommands.IncreaseIndentation" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                          SmallImageSource="pack://application:,,,/Icons/IndentHS.png"/>
+                            <RibbonButton ToolTip="Decrease Indent" Command="EditingCommands.DecreaseIndentation" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                          SmallImageSource="pack://application:,,,/Icons/OutdentHS.png"/>
+                        </RibbonControlGroup>
+                    </RibbonGroup>
+                    <RibbonGroup Header="Format">
+                        <RibbonButton Label="Convert Case" KeyTip="FK" Command="{x:Static local:MainWindow.ConvertCase}" Style="{StaticResource TextRibbonButton}"/>
+                        <RibbonMenuButton Label="Insert Special Character" KeyTip="FI" Style="{StaticResource TextRibbonMenuButton}">
+                            <RibbonMenuItem Header="E_n-Dash" Command="{x:Static local:MainWindow.InsertEnDash}"/>
+                            <RibbonMenuItem Header="E_m-Dash" Command="{x:Static local:MainWindow.InsertEmDash}"/>
+                            <RibbonMenuItem Header="_Ellipsis" Command="{x:Static local:MainWindow.InsertEllipsis}"/>
+                        </RibbonMenuButton>
+                    </RibbonGroup>
+                    <RibbonGroup Header="Search" KeyTip="F">
+                        <RibbonControlGroup>
+                            <RibbonButton Label="Find in Note" Command="ApplicationCommands.Find" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                          Style="{StaticResource TextRibbonButton}" SmallImageSource="pack://application:,,,/Icons/FindHS.png"/>
+                            <RibbonButton Label="Find Next in Note" Command="{x:Static local:MainWindow.FindNext}" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                          Style="{StaticResource TextRibbonButton}" SmallImageSource="pack://application:,,,/Icons/FindNextHS.png"/>
+                            <RibbonButton Label="Find Previous in Note" Command="{x:Static local:MainWindow.FindPrev}" CommandTarget="{Binding ElementName=richTextBox_Main}"
+                                          Style="{StaticResource TextRibbonButton}" SmallImageSource="pack://application:,,,/Icons/FindPreviousHS.png"/>
+                        </RibbonControlGroup>
+                        <RibbonControlGroup>
+                            <RibbonButton Label="Find in Tree" Command="{x:Static local:MainWindow.FindInTree}"
+                                          SmallImageSource="pack://application:,,,/Icons/FindTree.png"/>
+                            <RibbonButton Label="Find Next in Tree" Command="{x:Static local:MainWindow.FindNextInTree}"
+                                          SmallImageSource="pack://application:,,,/Icons/FindTreeNext.png"/>
+                            <RibbonButton Label="Find Previous in Tree" Command="{x:Static local:MainWindow.FindPrevInTree}"
+                                          SmallImageSource="pack://application:,,,/Icons/FindTreePrev.png"/>
+                        </RibbonControlGroup>
+                    </RibbonGroup>
+                </RibbonTab>
+                <RibbonTab Header="Options" KeyTip="O">
+                    <RibbonGroup Header="General">
+                        <RibbonCheckBox Label="Automatically Use Most Recent Template for New Files" KeyTip="T"
+                                        IsChecked="{Binding Source={x:Static settings:Settings.Default}, Path=UseMostRecentTemplate, Mode=TwoWay}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Max. Non-Family Associates when Adding Random Family:" Padding="0,5,5,5"/>
+                            <xctk:IntegerUpDown Minimum="0" Maximum="99" Value="{Binding Source={x:Static settings:Settings.Default}, Path=MaxAssociates, Mode=TwoWay}" TextAlignment="Center"/>
+                        </StackPanel>
+                    </RibbonGroup>
+                    <RibbonGroup Header="Font">
+                        <CheckBox IsChecked="{Binding Source={x:Static settings:Settings.Default}, Path=UseDefaultFont, Mode=TwoWay}">
+                            <CheckBox.Content>
+                                <StackPanel HorizontalAlignment="Left">
+                                    <Label Content="Use a Default _Font for New Notes (Instead of the Most Recent):" HorizontalAlignment="Left" Padding="0,5,5,5"/>
+                                    <ComboBox IsEnabled="{Binding Source={x:Static settings:Settings.Default}, Path=UseDefaultFont}"
+                                          ItemsSource="{Binding Source={StaticResource FontFamilies}}"
+                                          ItemTemplate="{DynamicResource FontTemplate}"
+                                          SelectedItem="{Binding Source={x:Static settings:Settings.Default}, Path=DefaultFont, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </CheckBox.Content>
+                        </CheckBox>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+            <StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem x:Name="statusBarItem_Position">
+                    <StatusBarItem.Style>
+                        <Style TargetType="StatusBarItem">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=noteTreeView, Path=SelectedItem.IdeaNoteType}" Value="TextNote">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StatusBarItem.Style>
+                </StatusBarItem>
+                <Separator Style="{StaticResource TextSeparator}"/>
+                <StatusBarItem>
+                    <StatusBarItem.Style>
+                        <Style TargetType="StatusBarItem">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=noteTreeView, Path=SelectedItem.IdeaNoteType}" Value="TextNote">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StatusBarItem.Style>
+                    <StatusBarItem.Content>
+                        <TextBlock Text="{Binding ElementName=comboBox_FontFamily, Path=SelectedValue}"
+                                   FontFamily="{Binding ElementName=comboBox_FontFamily, Path=SelectedValue}">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{Binding ElementName=colorPicker_textColor, Path=SelectedColor}"/>
+                            </TextBlock.Foreground>
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="FontWeight" Value="Normal"/>
+                                    <Setter Property="FontStyle" Value="Normal"/>
+                                    <Setter Property="TextDecorations" Value="{x:Null}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=toggleButton_Bold, Path=IsChecked}" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=toggleButton_Italic, Path=IsChecked}" Value="True">
+                                            <Setter Property="FontStyle" Value="Italic"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=toggleButton_Underline, Path=IsChecked}" Value="True">
+                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StatusBarItem.Content>
+                </StatusBarItem>
+                <StatusBarItem>
+                    <StatusBarItem.Style>
+                        <Style TargetType="StatusBarItem">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Content" Value=""/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ElementName=noteTreeView, Path=SelectedItem.IdeaNoteType}" Value="FileNote"/>
+                                        <Condition Binding="{Binding ElementName=noteTreeView, Path=SelectedItem.IdeaNoteType}" Value="ImageNote"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Content" Value="{Binding CurrentFileNote.FileName}"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StatusBarItem.Style>
+                </StatusBarItem>
+            </StatusBar>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <local:CollapsibleColumnDefinition Width="250">
+                        <local:CollapsibleColumnDefinition.Style>
+                            <Style TargetType="local:CollapsibleColumnDefinition">
+                                <Setter Property="Visible" Value="False"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowGenres}" Value="True">
+                                        <Setter Property="Visible" Value="True"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </local:CollapsibleColumnDefinition.Style>
+                    </local:CollapsibleColumnDefinition>
+                    <local:CollapsibleColumnDefinition Width="5">
+                        <local:CollapsibleColumnDefinition.Style>
+                            <Style TargetType="local:CollapsibleColumnDefinition">
+                                <Setter Property="Visible" Value="False"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowGenres}" Value="True">
+                                        <Setter Property="Visible" Value="True"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </local:CollapsibleColumnDefinition.Style>
+                    </local:CollapsibleColumnDefinition>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <CheckBox Content="Show Stories with No Genre" IsChecked="{Binding ShowNoGenres}"/>
+                    <TreeView Background="#00000000" ItemsSource="{Binding Genres}">
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Command="{x:Static local:MainWindow.GenreCheck}" CommandParameter="{Binding}"/>
+                                    <Label Content="{Binding Name}"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </TreeView.Resources>
+                    </TreeView>
+                </StackPanel>
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+                <Grid Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="20" Width="{Binding Source={x:Static settings:Settings.Default}, Path=TreeWidth, Mode=TwoWay}"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TreeView x:Name="noteTreeView" Background="#00000000" ItemsSource="{Binding SaveFile.Ideas}" SelectedItemChanged="noteTreeView_SelectedItemChanged"
+                              dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True" dd:DragDrop.UseDefaultDragAdorner="True" dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                              dd:DragDrop.DropHandler="{Binding}" ContextMenu="{StaticResource NoteTreeContextMenu}">
+                        <TreeView.CommandBindings>
+                            <CommandBinding Command="ApplicationCommands.Delete" Executed="DeleteNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.CutSingleNote}" Executed="CutSingleNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+                            <CommandBinding Command="ApplicationCommands.Cut" Executed="CutBranchCommand" CanExecute="CanExecuteNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.CopySingleNote}" Executed="CopySingleNoteCommand" CanExecute="CanExecuteNoteCommand"/>
+                            <CommandBinding Command="ApplicationCommands.Copy" Executed="CopyBranchCommand" CanExecute="CanExecuteNoteCommand"/>
+                            <CommandBinding Command="ApplicationCommands.Paste" Executed="PasteInTreeAsSiblingCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.PasteInTreeAsChild}" Executed="PasteInTreeAsChildCommand" CanExecute="CanExecuteNoteCommand"/>
+                        </TreeView.CommandBindings>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                                <Setter Property="Visibility" Value="{Binding Visibility}"/>
+                                <EventSetter Event="TreeViewItem.PreviewMouseRightButtonDown" Handler="noteTreeViewItem_PreviewMouseRightButtonDown"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type local:IdeaNote}" ItemsSource="{Binding Ideas}">
+                                <StackPanel Orientation="Horizontal" Height="18">
+                                    <Image Height="16" Width="16">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Source" Value="pack://application:,,,/Icons/Apps-accessories-text-editor-icon_16.png"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IdeaNoteType}" Value="FileNote">
+                                                        <Setter Property="Source" Value="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IdeaNoteType}" Value="ImageNote">
+                                                        <Setter Property="Source" Value="pack://application:,,,/Icons/Actions-view-preview-icon_16.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IdeaNoteType}" Value="MediaNote">
+                                                        <Setter Property="Source" Value="pack://application:,,,/Icons/Actions-tool-animator-icon_16.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IdeaNoteType}" Value="TimelineNote">
+                                                        <Setter Property="Source" Value="pack://application:,,,/Icons/Actions-view-calendar-day-icon_16.png"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IdeaNoteType}" Value="StoryNote">
+                                                        <Setter Property="Source" Value="pack://application:,,,/Icons/Actions-bookmarks-organize-icon_16.png"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:CharacterNote}" ItemsSource="{Binding Ideas}">
+                                <StackPanel Orientation="Horizontal" Height="18">
+                                    <Image Height="16" Width="16" Source="pack://application:,,,/Icons/Apps-system-users-icon_16.png"/>
+                                    <TextBlock Text="{Binding Relationship, Converter={StaticResource RelationshipNameConverter}}" Foreground="DimGray"/>
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" Foreground="{Binding Genders.LowestCheckedChild, Converter={StaticResource GenderColorConverter}}"/>
+                                    <TextBlock Text="{Binding AgeString, Mode=OneWay}" Foreground="DarkGreen"/>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
+                        </TreeView.Resources>
+                    </TreeView>
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+                    <xctk:RichTextBox x:Name="richTextBox_Main" Text="{Binding ElementName=noteTreeView, Path=SelectedItem.Rtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectionChanged="richTextBox_Main_SelectionChanged" AcceptsTab="True"
+                                      Grid.Column="2" SpellCheck.IsEnabled="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextChanged="richTextBox_Main_TextChanged"
+                                      IsDocumentEnabled="True" FontSize="16">
+                        <xctk:RichTextBoxFormatBarManager.FormatBar>
+                            <xctk:RichTextBoxFormatBar/>
+                        </xctk:RichTextBoxFormatBarManager.FormatBar>
+                        <xctk:RichTextBox.CommandBindings>
+                            <CommandBinding Command="ApplicationCommands.Find" Executed="richTextBox_Main_FindCommand" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.FindNext}" Executed="richTextBox_Main_FindNextCommand" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.FindPrev}" Executed="richTextBox_Main_FindPrevCommand" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.ConvertCase}" Executed="richTextBox_Main_ConvertCase" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.InsertEnDash}" Executed="richTextBox_Main_InsertEnDash" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.InsertEmDash}" Executed="richTextBox_Main_InsertEmDash" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.InsertEllipsis}" Executed="richTextBox_Main_InsertEllipsis" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="ApplicationCommands.Copy"/>
+                            <CommandBinding Command="ApplicationCommands.Cut"/>
+                            <CommandBinding Command="ApplicationCommands.Paste"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.PastePlainText}" Executed="PastePlainTextCommand" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="{x:Static local:MainWindow.PasteLink}" Executed="PasteLinkCommand" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="ApplicationCommands.Undo"/>
+                            <CommandBinding Command="ApplicationCommands.Redo"/>
+                            <CommandBinding Command="ApplicationCommands.SelectAll" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleBold" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleItalic" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleUnderline" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleBullets" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleNumbering" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleSubscript" Executed="richTextBox_Main_ToggleSubscript" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.ToggleSuperscript" Executed="richTextBox_Main_ToggleSuperscript" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.IncreaseIndentation" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.DecreaseIndentation" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.Delete"/>
+                            <CommandBinding Command="EditingCommands.AlignLeft" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.AlignRight" CanExecute="CanExecuteTextNoteCommand"/>
+                            <CommandBinding Command="EditingCommands.AlignCenter" CanExecute="CanExecuteTextNoteCommand"/>
+                        </xctk:RichTextBox.CommandBindings>
+                    </xctk:RichTextBox>
+                    <ContentControl Grid.Column="2" Content="{Binding ElementName=noteTreeView, Path=SelectedItem}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type local:FileNote}">
+                                <local:FileNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:ImageNote}">
+                                <local:ImageNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:MediaNote}">
+                                <local:MediaNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:TimelineNote}">
+                                <local:TimelineNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:StoryNote}">
+                                <local:StoryNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:CharacterNote}">
+                                <local:CharacterNoteControl DataContext="{Binding}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:TextNote}"/>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </Grid>
+            </Grid>
+        </DockPanel>
+    </xctk:BusyIndicator>
+</RibbonWindow>
