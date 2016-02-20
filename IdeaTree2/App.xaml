@@ -37,6 +37,7 @@
 
             <Image x:Key="NewRandomImg" Source="pack://application:,,,/Icons/Actions-view-refresh-icon_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
             <Image x:Key="NewImg" Source="pack://application:,,,/Icons/Actions-tools-wizard-icon_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
+            <Image x:Key="AppendImg" Source="pack://application:,,,/Icons/wizard-add_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
             <Image x:Key="AddImg" Source="pack://application:,,,/Icons/add_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
             <Image x:Key="EditImg" Source="pack://application:,,,/Icons/Actions-mail-mark-task-icon_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
             <Image x:Key="DeleteImg" Source="pack://application:,,,/Icons/delete_16.png" x:Shared="false" Style="{StaticResource ImageEnabled}"/>
@@ -85,6 +86,23 @@
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid x:Name="Grid">
                                 <ContentPresenter Content="{StaticResource NewImg}"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="AppendButton" TargetType="{x:Type Button}" BasedOn="{StaticResource DropShadowOnFocusEffect}">
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="BorderBrush" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{x:Null}"/>
+                <Setter Property="Width" Value="20"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid x:Name="Grid">
+                                <ContentPresenter Content="{StaticResource AppendImg}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>

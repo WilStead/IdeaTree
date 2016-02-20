@@ -189,7 +189,8 @@ namespace IdeaTree2
                 foreach (var child in LowestCheckedChildren(new List<NoteOption>()))
                 {
                     if (sb.Length > 0) sb.Append(", ");
-                    sb.Append(GetChildPathNode(child.Path).Replace("\\", ": "));
+                    string childPathNode = GetChildPathNode(child.Path);
+                    if (!string.IsNullOrEmpty(childPathNode)) sb.Append(childPathNode.Replace("\\", ": "));
                 }
                 return sb.ToString();
             }
@@ -266,12 +267,14 @@ namespace IdeaTree2
             OnPropertyChanged(nameof(Summary));
         }
 
-        public virtual void Choose() { ChooseFromList(ChildOptions); }
+        public virtual bool Choose(bool append = false) => ChooseFromList(ChildOptions, append);
 
-        public void ChooseFromList(ObservableCollection<NoteOption> list)
+        public bool ChooseFromList(ObservableCollection<NoteOption> list, bool append = false)
         {
-            // First erase any previous choice(s)
-            DeselectAllInList(list);
+            // First erase any previous choice(s), unless explicitly adding to the existing selection.
+            if (!append) DeselectAllInList(list);
+
+            bool madeSelection = false;
 
             // Options which aren't choices are categories; have each of their children make their choices, instead.
             if (!IsChoice)
@@ -282,18 +285,21 @@ namespace IdeaTree2
                 if (force || weight > 0)
                 {
                     // If there are no children, simply select the item.
-                    if (list.Count == 0) IsChecked = true;
+                    if (list.Count == 0)
+                    {
+                        IsChecked = true;
+                        return true;
+                    }
                     else
                     {
-                        foreach (var child in list) child.Choose();
+                        foreach (var child in list) madeSelection = child.Choose(append) || madeSelection;
                     }
-                    return;
+                    return madeSelection;
                 }
-                return;
+                return false;
             }
 
             int totalWeight = 0;
-            bool madeSelection = false;
             foreach (var child in list)
             {
                 bool force;
@@ -301,25 +307,54 @@ namespace IdeaTree2
                 if (force)
                 {
                     child.IsChecked = true;
-                    child.Choose();
-                    if (!IsMultiSelect) return;
+                    child.Choose(append);
+                    madeSelection = true;
+                    if (!IsMultiSelect) return true;
                 }
                 totalWeight += child.effectiveWeight;
                 if (IsMultiSelect)
                 {
                     if (random.Next(1, 101) <= child.effectiveWeight)
                     {
-                        child.IsChecked = true;
-                        child.Choose();
-                        madeSelection = true;
+                        if (!child.IsChecked)
+                        {
+                            child.IsChecked = true;
+                            child.Choose(append);
+                            madeSelection = true;
+                        }
+                        // If the child is already checked (in append scenarios),
+                        // do not consider this a new selection unless a new
+                        // sub-child is added.
+                        else if (!child.GetIsFullyChecked())
+                            madeSelection = child.Choose(append);
                     }
+                }
+                // For non-multi-select choices, if a child is already selected,
+                // the decision is considered already made. This should only occur
+                // when appending.
+                else if (child.IsChecked)
+                {
+                    child.Choose(append);
+                    madeSelection = true;
+                    break;
                 }
             }
             // If a multi-select choice did not select any of its choices, select one
             // as if they were a single-selection set of weighted choices, unless none
-            // is specifically allowed.
-            if (!IsMultiSelect || (!madeSelection && !AllowsNone))
+            // is specifically allowed. If all the children are already fully checked,
+            // do nothing.
+            if (!madeSelection && (!IsMultiSelect || !AllowsNone || append) &&
+                list.Any(c => !c.GetIsFullyChecked()))
             {
+                // First, exclude any selections which are already fully-selected,
+                // and recalculate the weighting accordingly.
+                totalWeight = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i].GetIsFullyChecked()) list[i].effectiveWeight = 0;
+                    else totalWeight += list[i].effectiveWeight;
+                }
+
                 if (AllowsNone) totalWeight += NoneWeight;
                 int selectedValue = random.Next(1, totalWeight + 1);
                 for (int i = 0; i < list.Count; i++)
@@ -327,12 +362,14 @@ namespace IdeaTree2
                     if (selectedValue <= list[i].effectiveWeight)
                     {
                         list[i].IsChecked = true;
-                        list[i].Choose();
+                        list[i].Choose(append);
+                        madeSelection = true;
                         break;
                     }
                     else selectedValue -= list[i].effectiveWeight;
                 }
             }
+            return madeSelection;
         }
 
         public object Clone()
@@ -455,6 +492,16 @@ namespace IdeaTree2
             else force = false;
             if (modifiers.Count > 0) return (int)Math.Round(modifiers.Average(m => m.Weight));
             else return Weight;
+        }
+
+        public bool GetIsFullyChecked()
+        {
+            if (!IsChecked) return false;
+            if (ChildOptions.Count == 0) return true;
+            if (IsMultiSelect) return ChildOptions.All(c => c.GetIsFullyChecked());
+            else if (ChildOptions.Count(c => c.IsChecked) > 0)
+                return ChildOptions.First(c => c.IsChecked).GetIsFullyChecked();
+            return false;
         }
 
         public string GetSummary(int indentLevel)

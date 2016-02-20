@@ -21,6 +21,8 @@
         <ContextMenu x:Key="NoteOptionContextMenu">
             <MenuItem Header="Randomize" Command="{x:Static local:CharacterNoteControl.RandomizeNoteOption}"
                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
+            <MenuItem Header="Add to Random Selections" Command="{x:Static local:CharacterNoteControl.AddRandom}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
             <MenuItem Header="Add Custom Child Option" Command="{x:Static local:CharacterNoteControl.AddCustomChild}"
                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget}"/>
             <MenuItem Header="Save Custom Option to Template" Command="{x:Static local:CharacterNoteControl.SaveCustomToTemplate}"
@@ -35,6 +37,7 @@
 
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static local:CharacterNoteControl.RandomizeNoteOption}" Executed="RandomizeNoteOptionCommand" CanExecute="CanCommandNoteOption"/>
+        <CommandBinding Command="{x:Static local:CharacterNoteControl.AddRandom}" Executed="AddRandomCommand" CanExecute="CanAddRandomCommand"/>
         <CommandBinding Command="{x:Static local:CharacterNoteControl.AddCustomChild}" Executed="AddCustomChildCommand" CanExecute="CanCommandNoteOption"/>
         <CommandBinding Command="{x:Static local:CharacterNoteControl.SaveCustomToTemplate}" Executed="SaveCustomToTemplateCommand" CanExecute="CanSaveCustomToTemplate"/>
         <CommandBinding Command="{x:Static local:CharacterNoteControl.CollapseAll}" Executed="CollapseAllCommand"/>
@@ -286,14 +289,16 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Traits:" Padding="5,5,5,0"/>
             <Button Click="button_NewTraits_Click" ToolTip="Randomize Traits" Grid.Column="1" Style="{DynamicResource NewButton}" VerticalAlignment="Bottom" Margin="2,0"/>
-            <Button Click="button_EditTraits_Click" ToolTip="Edit Traits" Grid.Column="2" Style="{DynamicResource EditButton}" HorizontalAlignment="Left" Margin="2,0"/>
-            <Button Click="button_AddCustomTrait_Click" ToolTip="Add Custom Value" Grid.Column="3" Style="{DynamicResource AddButton}" HorizontalAlignment="Left" Margin="2,0"/>
-            <Button Click="button_ClearTraits_Click" ToolTip="Clear Traits" Grid.Column="4" Style="{DynamicResource DeleteButton}" HorizontalAlignment="Left" Margin="2,0"/>
-            <Grid Grid.Row="1" Grid.ColumnSpan="5">
+            <Button Click="button_AppendTraits_Click" ToolTip="Add to Random Traits" Grid.Column="2" Style="{DynamicResource AppendButton}" VerticalAlignment="Bottom" Margin="2,0"/>
+            <Button Click="button_EditTraits_Click" ToolTip="Edit Traits" Grid.Column="3" Style="{DynamicResource EditButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Button Click="button_AddCustomTrait_Click" ToolTip="Add Custom Value" Grid.Column="4" Style="{DynamicResource AddButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Button Click="button_ClearTraits_Click" ToolTip="Clear Traits" Grid.Column="5" Style="{DynamicResource DeleteButton}" HorizontalAlignment="Left" Margin="2,0"/>
+            <Grid Grid.Row="1" Grid.ColumnSpan="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

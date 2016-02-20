@@ -1882,9 +1882,9 @@ namespace IdeaTree2
             Genders.FindOption(genderOptions.LowestCheckedChild.Path).IsChecked = true;
         }
 
-        public void ChooseTraits(bool relationshipRestrictions)
+        public void ChooseTraits(bool relationshipRestrictions, bool append = false)
         {
-            Traits.Choose();
+            Traits.Choose(append);
             if (relationshipRestrictions && Relationship != null && Relationship.RequiresOrientationMatch)
                 ReconcileOrientation(Parent as CharacterNote, Relationship);
         }

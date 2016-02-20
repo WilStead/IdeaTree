@@ -246,6 +246,8 @@ namespace IdeaTree2
 
         private void button_NewSetting_Click(object sender, RoutedEventArgs e) => ((StoryNote)DataContext).Settings.Choose();
 
+        private void button_AppendSetting_Click(object sender, RoutedEventArgs e) => ((StoryNote)DataContext).Settings.Choose(true);
+
         private void button_EditSettings_Click(object sender, RoutedEventArgs e)
         {
             if (((StoryNote)DataContext).RootSaveFile?.Template?.StoryTemplate?.Settings == null)
@@ -280,6 +282,8 @@ namespace IdeaTree2
         #region Themes
 
         private void button_NewThemes_Click(object sender, RoutedEventArgs e) => ((StoryNote)DataContext).Themes.Choose();
+
+        private void button_AppendThemes_Click(object sender, RoutedEventArgs e) => ((StoryNote)DataContext).Themes.Choose(true);
 
         private void button_EditThemes_Click(object sender, RoutedEventArgs e)
         {
@@ -322,6 +326,12 @@ namespace IdeaTree2
         private void button_NewGenres_Click(object sender, RoutedEventArgs e)
         {
             ((StoryNote)DataContext).Genres.Choose();
+            UpdateGenreTabs();
+        }
+
+        private void button_AppendGenres_Click(object sender, RoutedEventArgs e)
+        {
+            ((StoryNote)DataContext).Genres.Choose(true);
             UpdateGenreTabs();
         }
 

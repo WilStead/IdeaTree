@@ -412,10 +412,11 @@ namespace IdeaTree2
             ElementOptions.Add(child);
         }
 
-        public override void Choose()
+        public override bool Choose(bool append = false)
         {
-            ChooseFromList(ChildOptions);
-            ChooseFromList(ElementOptions);
+            bool madeSelection = ChooseFromList(ChildOptions, append);
+            madeSelection = madeSelection || ChooseFromList(ElementOptions, append);
+            return madeSelection;
         }
 
         public void ChooseElement() => ChooseFromList(ElementOptions);

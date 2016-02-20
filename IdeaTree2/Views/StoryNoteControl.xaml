@@ -52,6 +52,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Setting" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                 <Button Click="button_NewSetting_Click" Style="{DynamicResource NewButton}" ToolTip="New Setting" Margin="2,0"/>
+                                <Button Click="button_AppendSetting_Click" Style="{DynamicResource AppendButton}" ToolTip="Add to Setting" Margin="2,0"/>
                                 <Button Click="button_EditSettings_Click" Style="{DynamicResource EditButton}" ToolTip="Edit Settings" Margin="2,0"/>
                                 <Button Click="button_AddCustomSetting_Click" Style="{DynamicResource AddButton}" ToolTip="Add Custom Value" Margin="2,0"/>
                                 <Button Click="button_ClearSetting_Click" Style="{DynamicResource DeleteButton}" ToolTip="Clear Setting" Margin="2,0"/>
@@ -94,6 +95,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Themes" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                 <Button Click="button_NewThemes_Click" Style="{DynamicResource NewButton}" ToolTip="New Themes" Margin="2,0"/>
+                                <Button Click="button_AppendThemes_Click" Style="{DynamicResource AppendButton}" ToolTip="Add to Themes" Margin="2,0"/>
                                 <Button Click="button_EditThemes_Click" Style="{DynamicResource EditButton}" ToolTip="Edit Themes" Margin="2,0"/>
                                 <Button Click="button_AddCustomTheme_Click" Style="{DynamicResource AddButton}" ToolTip="Add Custom Value" Margin="2,0"/>
                                 <Button Click="button_ClearThemes_Click" Style="{DynamicResource DeleteButton}" ToolTip="Clear Themes" Margin="2,0"/>
@@ -136,6 +138,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Genres" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                 <Button Click="button_NewGenres_Click" Style="{DynamicResource NewButton}" ToolTip="Randomize Genres" Margin="2,0"/>
+                                <Button Click="button_AppendGenres_Click" Style="{DynamicResource AppendButton}" ToolTip="Add to Genres" Margin="2,0"/>
                                 <Button Click="button_EditGenres_Click" Style="{DynamicResource EditButton}" ToolTip="Edit Genres" Margin="2,0"/>
                                 <Button Click="button_ClearGenres_Click" Style="{DynamicResource DeleteButton}" ToolTip="Clear Themes" Margin="2,0"/>
                             </StackPanel>

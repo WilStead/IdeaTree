@@ -13,6 +13,7 @@ namespace IdeaTree2
     public partial class CharacterNoteControl : UserControl
     {
         public static readonly RoutedCommand RandomizeNoteOption = new RoutedCommand();
+        public static readonly RoutedCommand AddRandom = new RoutedCommand();
         public static readonly RoutedCommand AddCustomChild = new RoutedCommand();
         public static readonly RoutedCommand SaveCustomToTemplate = new RoutedCommand();
         public static readonly RoutedCommand CollapseAll = new RoutedCommand();
@@ -173,6 +174,8 @@ namespace IdeaTree2
 
         private void button_NewTraits_Click(object sender, RoutedEventArgs e) => ((CharacterNote)DataContext).ChooseTraits(checkBox_RelationshipRestriction.IsChecked ?? false);
 
+        private void button_AppendTraits_Click(object sender, RoutedEventArgs e) => ((CharacterNote)DataContext).ChooseTraits(checkBox_RelationshipRestriction.IsChecked ?? false, true);
+
         private void button_EditTraits_Click(object sender, RoutedEventArgs e)
         {
             if (((CharacterNote)DataContext).RootSaveFile?.Template?.CharacterTemplate?.Traits == null)
@@ -212,6 +215,21 @@ namespace IdeaTree2
             TreeView treeView = (TreeView)e.Parameter;
             NoteOption noteOption = (NoteOption)treeView.SelectedItem;
             if (noteOption != null) noteOption.Choose();
+        }
+
+        private void AddRandomCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            TreeView treeView = (TreeView)e.Parameter;
+            NoteOption noteOption = (NoteOption)treeView.SelectedItem;
+            if (noteOption != null) noteOption.Choose(true);
+        }
+
+        private void CanAddRandomCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            TreeView treeView = (TreeView)e.Parameter;
+            NoteOption noteOption = (NoteOption)treeView.SelectedItem;
+            if (noteOption == null) e.CanExecute = false;
+            else e.CanExecute = noteOption.IsMultiSelect || !noteOption.IsChoice;
         }
 
         private void AddCustomChildCommand(object sender, ExecutedRoutedEventArgs e)
