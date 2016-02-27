@@ -259,6 +259,7 @@ namespace IdeaTree2
             var subtype = archetype.ChildOptions.FirstOrDefault(o => o.IsChecked)?.Name;
             if (!string.IsNullOrEmpty(subtype)) PlotSubtype = subtype;
 
+            archetype.ChooseElement();
             var element = archetype.ElementOptions.FirstOrDefault(o => o.IsChecked)?.Name;
             if (!string.IsNullOrEmpty(element)) PlotElement = element;
         }
