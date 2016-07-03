@@ -647,13 +647,14 @@
             <Ribbon DockPanel.Dock="Top">
                 <Ribbon.QuickAccessToolBar>
                     <RibbonQuickAccessToolBar>
+                        <RibbonButton Command="ApplicationCommands.Open" ToolTip="Open" SmallImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"/>
                         <RibbonButton Command="ApplicationCommands.Save" ToolTip="Save" SmallImageSource="pack://application:,,,/Icons/Actions-document-save-icon_16.png"/>
                         <RibbonButton Command="ApplicationCommands.Undo" ToolTip="Undo" SmallImageSource="pack://application:,,,/Icons/Actions-edit-undo-icon_16.png"/>
                         <RibbonButton Command="ApplicationCommands.Redo" ToolTip="Redo" SmallImageSource="pack://application:,,,/Icons/Actions-edit-redo-icon_16.png"/>
                     </RibbonQuickAccessToolBar>
                 </Ribbon.QuickAccessToolBar>
                 <Ribbon.ApplicationMenu>
-                    <RibbonApplicationMenu SmallImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png" KeyTip="F">
+                    <RibbonApplicationMenu SmallImageSource="pack://application:,,,/Icons/Actions-document-new-icon_16.png" KeyTip="F">
                         <RibbonApplicationMenuItem Header="_New" Command="ApplicationCommands.New" ImageSource="pack://application:,,,/Icons/Actions-document-new-icon_16.png"/>
                         <RibbonApplicationMenuItem Header="_Open" Command="ApplicationCommands.Open" ImageSource="pack://application:,,,/Icons/Actions-document-open-icon_16.png"/>
                         <RibbonApplicationMenuItem Header="_Save" Command="ApplicationCommands.Save" IsEnabled="{Binding SaveFile.ChangedSinceLastSave}"
@@ -866,6 +867,7 @@
                                             ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
                             <RibbonMenuItem Header="_Full Tree" Command="{x:Static local:MainWindow.CopyTreeNoteNames}"
                                             ImageSource="pack://application:,,,/Icons/Actions-edit-copy-icon_16.png"/>
+                            <RibbonMenuItem IsCheckable="True" IsChecked="{Binding CopyShowingGenres, Mode=TwoWay}" Header="Copy Showing _Genres Only" IsEnabled="{Binding ShowGenres}"/>
                             <RibbonSeparator>
                                 <RibbonSeparator.Style>
                                     <Style TargetType="RibbonSeparator">
@@ -1227,19 +1229,47 @@
                     </local:CollapsibleColumnDefinition>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <CheckBox Content="Show Stories with No Genre" IsChecked="{Binding ShowNoGenres}"/>
-                    <TreeView Background="#00000000" ItemsSource="{Binding Genres}">
-                        <TreeView.Resources>
-                            <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
-                                <StackPanel Orientation="Horizontal">
-                                    <CheckBox Command="{x:Static local:MainWindow.GenreCheck}" CommandParameter="{Binding}"/>
-                                    <Label Content="{Binding Name}"/>
-                                </StackPanel>
-                            </HierarchicalDataTemplate>
-                        </TreeView.Resources>
-                    </TreeView>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <CheckBox Content="Show Stories with No Genre" IsChecked="{Binding ShowNoGenres}"/>
+                        <GroupBox Header="Must Include (AND)" Margin="0,2,0,0">
+                            <TreeView Background="#00000000" BorderThickness="0" ItemsSource="{Binding Genres}">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Command="{x:Static local:MainWindow.GenreCheck}" CommandParameter="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                            <Label Content="{Binding Name}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </GroupBox>
+                        <GroupBox Header="May Include (OR)" Margin="0,2,0,0">
+                            <TreeView Background="#00000000" BorderThickness="0" ItemsSource="{Binding PossibleGenres}">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Command="{x:Static local:MainWindow.GenreCheck}" CommandParameter="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                            <Label Content="{Binding Name}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </GroupBox>
+                        <GroupBox Header="Must Not Include" Margin="0,2,0,0">
+                            <TreeView Background="#00000000" BorderThickness="0" ItemsSource="{Binding ExcludedGenres}">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:NoteOption}" ItemsSource="{Binding ChildOptions}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Command="{x:Static local:MainWindow.GenreCheck}" CommandParameter="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                            <Label Content="{Binding Name}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>

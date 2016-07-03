@@ -183,22 +183,44 @@ namespace IdeaTree2
             return newNote;
         }
 
-        private bool MatchesGenres(ObservableCollection<NoteOption> genres, bool showNoGenres)
+        private bool MatchesGenres(ObservableCollection<NoteOption> requiredGenres, ObservableCollection<NoteOption> possibleGenres,
+            ObservableCollection<NoteOption> excludedGenres, bool showNoGenres, bool topLevel = true)
         {
-            foreach (var genre in genres.Where(g => g.IsChecked))
+            if (topLevel && !Genres.ChildOptions.Any(g => g.IsChecked)) return showNoGenres;
+
+            foreach (var genre in requiredGenres.Where(g => g.IsChecked))
             {
-                if (showNoGenres && !Genres.ChildOptions.Any(g => g.IsChecked)) return true;
                 if (Genres.FindOption(genre.Path)?.IsChecked != true) return false;
-                if (!MatchesGenres(genre.ChildOptions, showNoGenres)) return false;
+                if (!MatchesGenres(genre.ChildOptions, possibleGenres, excludedGenres, showNoGenres, false)) return false;
             }
+
+            foreach (var genre in excludedGenres.Where(g => g.IsChecked))
+            {
+                if (Genres.FindOption(genre.Path)?.IsChecked == true) return false;
+                if (!MatchesGenres(requiredGenres, possibleGenres, genre.ChildOptions, showNoGenres, false)) return false;
+            }
+
+            if (!possibleGenres.Any(g => g.IsChecked)) return true;
+            bool possibleHit = false;
+            foreach (var genre in possibleGenres.Where(g => g.IsChecked))
+            {
+                if (Genres.FindOption(genre.Path)?.IsChecked == true)
+                    possibleHit = !genre.ChildOptions.Any(g => g.IsChecked) ||
+                        MatchesGenres(requiredGenres, genre.ChildOptions, excludedGenres, showNoGenres, false);
+            }
+            if (!possibleHit) return false;
+
             return true;
         }
 
-        public override bool ShowOnlyMatchingGenres(ObservableCollection<NoteOption> genres, bool showNoGenres, bool force = false)
+        public override bool ShowOnlyMatchingGenres(ObservableCollection<NoteOption> requiredGenres, ObservableCollection<NoteOption> possibleGenres,
+            ObservableCollection<NoteOption> excludedGenres, bool showNoGenres, bool force = false)
         {
-            bool show = force || MatchesGenres(genres, showNoGenres);
+            bool show = force || MatchesGenres(requiredGenres, possibleGenres, excludedGenres, showNoGenres);
             foreach (var child in Ideas)
-                show = show || child.ShowOnlyMatchingGenres(genres, showNoGenres, force || show);
+            {
+                show = show || child.ShowOnlyMatchingGenres(requiredGenres, possibleGenres, excludedGenres, showNoGenres, force || show);
+            }
             if (show) Visibility = Visibility.Visible;
             else Visibility = Visibility.Collapsed;
             return show;

@@ -344,11 +344,12 @@ namespace IdeaTree2
 
         public void RefreshTemplate() => OnPropertyChanged(nameof(RootSaveFile));
 
-        public virtual bool ShowOnlyMatchingGenres(ObservableCollection<NoteOption> genres, bool showNoGenres, bool force = false)
+        public virtual bool ShowOnlyMatchingGenres(ObservableCollection<NoteOption> requiredGenres, ObservableCollection<NoteOption> possibleGenres,
+            ObservableCollection<NoteOption> excludedGenres, bool showNoGenres, bool force = false)
         {
             bool show = force;
             foreach (var child in Ideas)
-                show = show || child.ShowOnlyMatchingGenres(genres, showNoGenres, force);
+                show = show || child.ShowOnlyMatchingGenres(requiredGenres, possibleGenres, excludedGenres, showNoGenres, force);
             if (show) Visibility = Visibility.Visible;
             else Visibility = Visibility.Collapsed;
             return show;

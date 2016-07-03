@@ -129,6 +129,27 @@ namespace IdeaTree2
             set { SetProperty(ref genres, value); }
         }
 
+        private ObservableCollection<NoteOption> possibleGenres;
+        public ObservableCollection<NoteOption> PossibleGenres
+        {
+            get { return possibleGenres; }
+            set { SetProperty(ref possibleGenres, value); }
+        }
+
+        private ObservableCollection<NoteOption> excludedGenres;
+        public ObservableCollection<NoteOption> ExcludedGenres
+        {
+            get { return excludedGenres; }
+            set { SetProperty(ref excludedGenres, value); }
+        }
+
+        private bool copyShowingGenres;
+        public bool CopyShowingGenres
+        {
+            get { return copyShowingGenres; }
+            set { SetProperty(ref copyShowingGenres, value); }
+        }
+
         private string searchText;
 
         public static OpenFileDialog openImageDialog = new OpenFileDialog() { Filter = $"Image Files|{ImageNote.ImageExtensionsString}|All Files|*.*" };
@@ -1128,7 +1149,8 @@ namespace IdeaTree2
         {
             if (sb.Length > 0) sb.AppendLine();
             for (int i = 0; i < indentLevel; i++) sb.Append('\t');
-            sb.Append(note.Name);
+            if (!CopyShowingGenres || note.Visibility == Visibility.Visible)
+                sb.Append(note.Name);
             foreach (var child in note.Ideas) CopyNoteNames(child, sb, indentLevel + 1);
         }
 
@@ -1146,6 +1168,8 @@ namespace IdeaTree2
             StringBuilder sb = new StringBuilder();
             foreach (var note in notes)
             {
+                if (CopyShowingGenres && note.Visibility != Visibility.Visible) continue;
+
                 if (children) CopyNoteNames(note, sb, 0);
                 else
                 {
@@ -1414,25 +1438,34 @@ namespace IdeaTree2
 
         public void ApplyGenreFilter()
         {
-            foreach (var note in SaveFile.Ideas) note.ShowOnlyMatchingGenres(Genres, ShowNoGenres);
+            foreach (var note in SaveFile.Ideas) note.ShowOnlyMatchingGenres(Genres, PossibleGenres, ExcludedGenres, ShowNoGenres);
         }
 
-        private void AddCutsomGenres(ObservableCollection<IdeaNote> ideaCollection)
+        private void AddCustomGenres(ObservableCollection<IdeaNote> ideaCollection)
         {
             foreach (StoryNote idea in ideaCollection.Where(i => i.IdeaNoteType == nameof(StoryNote)))
             {
                 foreach (NoteOption genre in idea.Genres.ChildOptions.Where(c => !Genres.Any(g => g.Name == c.Name)))
+                {
                     Genres.Add(genre.Clone() as NoteOption);
-                AddCutsomGenres(idea.Ideas);
+                    PossibleGenres.Add(genre.Clone() as NoteOption);
+                    ExcludedGenres.Add(genre.Clone() as NoteOption);
+                }
+                AddCustomGenres(idea.Ideas);
             }
         }
 
         public void InitializeGenres()
         {
-            Genres = new ObservableCollection<NoteOption>(Template.StoryTemplate.Genres.ChildOptions);
-            if (SaveFile != null) AddCutsomGenres(SaveFile.Ideas);
+            Genres = new ObservableCollection<NoteOption>(Template.StoryTemplate.Genres.ChildOptions.Select(c => c.Clone() as NoteOption));
+            PossibleGenres = new ObservableCollection<NoteOption>(Template.StoryTemplate.Genres.ChildOptions.Select(c => c.Clone() as NoteOption));
+            ExcludedGenres = new ObservableCollection<NoteOption>(Template.StoryTemplate.Genres.ChildOptions.Select(c => c.Clone() as NoteOption));
+            if (SaveFile != null) AddCustomGenres(SaveFile.Ideas);
             foreach (var genre in Genres) genre.IsChecked = false;
+            foreach (var genre in PossibleGenres) genre.IsChecked = false;
+            foreach (var genre in ExcludedGenres) genre.IsChecked = false;
             ApplyGenreFilter();
+            CopyShowingGenres = true;
         }
     }
 }
