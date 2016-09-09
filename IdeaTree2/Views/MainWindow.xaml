@@ -1011,7 +1011,8 @@
                                 </RibbonGallery>
                             </RibbonComboBox>
                             <RibbonComboBox>
-                                <RibbonGallery x:Name="comboBox_FontSize" SelectionChanged="comboBox_FontSize_SelectionChanged">
+                                <RibbonGallery x:Name="comboBox_FontSize" SelectionChanged="comboBox_FontSize_SelectionChanged"
+                                               SelectedItem="{Binding Source={x:Static settings:Settings.Default}, Path=MostRecentFontSize, Mode=TwoWay}">
                                     <RibbonGalleryCategory MaxColumnCount="1">
                                         <RibbonGalleryCategory.ItemsSource>
                                             <x:Array Type="{x:Type s:Int32}">
@@ -1124,6 +1125,29 @@
                                           ItemsSource="{Binding Source={StaticResource FontFamilies}}"
                                           ItemTemplate="{DynamicResource FontTemplate}"
                                           SelectedItem="{Binding Source={x:Static settings:Settings.Default}, Path=DefaultFont, Mode=TwoWay}"/>
+                                    <ComboBox IsEnabled="{Binding Source={x:Static settings:Settings.Default}, Path=UseDefaultFont}"
+                                              SelectedValue="{Binding Source={x:Static settings:Settings.Default}, Path=DefaultFontSize, Mode=TwoWay}">
+                                        <ComboBox.ItemsSource>
+                                            <x:Array Type="{x:Type s:Double}">
+                                                <s:Double>8</s:Double>
+                                                <s:Double>9</s:Double>
+                                                <s:Double>10</s:Double>
+                                                <s:Double>11</s:Double>
+                                                <s:Double>12</s:Double>
+                                                <s:Double>14</s:Double>
+                                                <s:Double>16</s:Double>
+                                                <s:Double>18</s:Double>
+                                                <s:Double>20</s:Double>
+                                                <s:Double>22</s:Double>
+                                                <s:Double>24</s:Double>
+                                                <s:Double>26</s:Double>
+                                                <s:Double>28</s:Double>
+                                                <s:Double>36</s:Double>
+                                                <s:Double>48</s:Double>
+                                                <s:Double>72</s:Double>
+                                            </x:Array>
+                                        </ComboBox.ItemsSource>
+                                    </ComboBox>
                                 </StackPanel>
                             </CheckBox.Content>
                         </CheckBox>

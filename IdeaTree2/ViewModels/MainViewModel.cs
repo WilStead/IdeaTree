@@ -903,9 +903,16 @@ namespace IdeaTree2
                 Xceed.Wpf.Toolkit.RichTextBox rtb = new Xceed.Wpf.Toolkit.RichTextBox();
                 rtb.SelectAll();
                 if (Settings.Default.UseDefaultFont && Settings.Default.DefaultFont != null)
+                {
                     rtb.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, (FontFamily)Settings.Default.DefaultFont);
+                    if (Settings.Default.DefaultFontSize > 0)
+                        rtb.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, Settings.Default.DefaultFontSize);
+                }
                 else if (Settings.Default.MostRecentFont != null)
+                {
                     rtb.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, (FontFamily)Settings.Default.MostRecentFont);
+                    rtb.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, Settings.Default.MostRecentFontSize);
+                }
                 newNote.Rtf = rtb.Text;
             });
             AddNote(newNote, parent, index);

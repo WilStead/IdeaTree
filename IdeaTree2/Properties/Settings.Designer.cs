@@ -164,5 +164,29 @@ namespace IdeaTree2.Properties {
                 this["MostRecentFont"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public double DefaultFontSize {
+            get {
+                return ((double)(this["DefaultFontSize"]));
+            }
+            set {
+                this["DefaultFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public double MostRecentFontSize {
+            get {
+                return ((double)(this["MostRecentFontSize"]));
+            }
+            set {
+                this["MostRecentFontSize"] = value;
+            }
+        }
     }
 }
